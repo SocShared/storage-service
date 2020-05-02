@@ -1,0 +1,33 @@
+image: java:11
+
+stages:
+  - build
+  - docker-build
+  - docker-push
+  - docker-deploy-swarm
+
+before_script:
+  - chmod +x gradlew
+
+build:
+  stage: build
+  script: ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/socshared-microservice-template-1.0.0-SNAPSHOT.jar
+
+docker-build:
+  stage: docker-build
+  script:
+    - sudo docker build -t $CI_DOCKER_LOGIN/socshared-microservice-template .
+
+docker-push:
+  stage: docker-push
+  script:
+    - sudo docker login -u "$CI_DOCKER_LOGIN" -p "$CI_DOCKER_PASSWORD"
+    - sudo docker push $CI_DOCKER_LOGIN/socshared-microservice-template
+
+docker-deploy-swarm:
+  stage: docker-deploy-swarm
+  script:
+    - sudo docker stack deploy -c docker-compose.yaml socshared

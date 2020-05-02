@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:facebook_db?useUnicode=yes&characterEncoding=UTF-8
+    driver-class-name: org.h2.Driver
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+  zipkin:
+    base-url: https://zipkin.socshared.ml/
+    service:
+      name: ${spring.application.name}
+  main:
+    allow-bean-definition-overriding: true

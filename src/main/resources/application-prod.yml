@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/db
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  zipkin:
+    base-url: http://zipkin:9411/
+    service:
+      name: ${spring.application.name}
+  main:
+    allow-bean-definition-overriding: true
+
+facebook:
+  redirect:
+    uri: https://socshared.ml/connect/fb
+  adapter:
+    id: fb-adapter-prod
