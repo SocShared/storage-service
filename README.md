@@ -1,2 +1,2 @@
-# auth-service
+# storage-service
 
