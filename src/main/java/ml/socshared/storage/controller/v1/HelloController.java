@@ -1,6 +1,6 @@
 package ml.socshared.storage.controller.v1;
 
-import ml.socshared.storage.service.TestService;
+import ml.socshared.storage.service.GroupService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +13,9 @@ import java.util.HashMap;
 @RequestMapping(value = "/api/v1")
 public class HelloController implements HelloApi {
 
-    private TestService service;
+    private GroupService service;
 
-    public HelloController(TestService service) {
+    public HelloController(GroupService service) {
         this.service = service;
     }
 

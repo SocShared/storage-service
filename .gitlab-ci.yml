@@ -19,6 +19,7 @@ build:
 docker-build:
   stage: docker-build
   script:
+    - docker 2>/dev/null 1>&2 rmi `docker images -aq` || true
     - docker build -t $CI_DOCKER_LOGIN/socshared-microservice-template .
 
 docker-push:

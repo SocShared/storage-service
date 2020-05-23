@@ -13,21 +13,27 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "groups")
+@Table(name = "groups", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "facebook_id", "vk_id"})})
 public class Group extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "group_id")
     private UUID groupId;
 
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "social_network", nullable = false)
     @Enumerated(EnumType.STRING)
     private SocialNetwork socialNetwork;
 
-    @Column(name = "facebook_id", unique = true)
+    @Column(name = "facebook_id")
     private String facebookId;
 
-    @Column(name = "vk_id", unique = true)
+    @Column(name = "vk_id")
     private String vkId;
 
     @JsonBackReference

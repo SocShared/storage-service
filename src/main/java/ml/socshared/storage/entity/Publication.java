@@ -1,11 +1,14 @@
 package ml.socshared.storage.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import ml.socshared.storage.entity.base.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,12 +20,16 @@ public class Publication extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "publication_id")
     private UUID publicationId;
 
-    @Column(name = "text")
+    @Column(name = "user_id")
+    private UUID userId;
+
+    @Column(name = "text", length = 15000, nullable = false)
     private String text;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "publications_groups",
             joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "publication_id"),
@@ -30,9 +37,20 @@ public class Publication extends BaseEntity {
     private Set<Group> groups;
 
     @Column(name = "publication_date_time")
-    private LocalDateTime publicationDateTime;
+    private Date publicationDateTime;
 
-    @OneToMany(mappedBy = "publication", cascade = CascadeType.PERSIST)
+    @Column(name = "post_type")
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
     private Set<GroupPostStatus> postStatus;
 
+    public enum PostType {
+        @JsonProperty("in_real_time")
+        IN_REAL_TIME,
+        @JsonProperty("deferred")
+        DEFERRED
+    }
 }
