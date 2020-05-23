@@ -8,6 +8,7 @@ import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class PublicationResponse {
     private UUID publicationId;
     private UUID userId;
     private String text;
-    private LocalDateTime publicationDateTime;
+    private Date publicationDateTime;
     private LocalDateTime createdAt;
     private Publication.PostType type;
     private Set<GroupPostStatus> postStatus;

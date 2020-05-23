@@ -18,8 +18,8 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
     Page<PublicationModel> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
 
     @Query("select p from Publication p join GroupPostStatus gps " +
-            "where (p.publicationDateTime is null and gps.postStatus = ml.socshared.storage.entity.GroupPostStatus.PostStatus.AWAITING) or " +
-            "(p.publicationDateTime is not null and p.publicationDateTime < CURRENT_TIME and gps.postStatus = ml.socshared.storage.entity.GroupPostStatus.PostStatus.AWAITING)")
+            "where (p.publicationDateTime is null and gps.postStatus = 'AWAITING') or " +
+            "(p.publicationDateTime is not null and p.publicationDateTime < CURRENT_TIME and gps.postStatus = 'AWAITING')")
     Page<PublicationModel> findNotPublishing(Pageable pageable);
 
 }
