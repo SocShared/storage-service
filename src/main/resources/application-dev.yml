@@ -13,3 +13,7 @@ spring:
       name: ${spring.application.name}
   main:
     allow-bean-definition-overriding: true
+
+feign:
+  url:
+    mail: ${AUTH_SERVICe:https://auth.socshared.ml}

@@ -1,7 +1,7 @@
-package ml.socshared.auth.config.security.jwt;
+package ml.socshared.storage.config.security.jwt;
 
 import lombok.RequiredArgsConstructor;
-import ml.socshared.auth.service.jwt.JwtTokenProvider;
+import ml.socshared.storage.service.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,9 +26,9 @@ public class JwtTokenFilter extends GenericFilterBean {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
             String token = jwtTokenProvider.resolveToken(httpServletRequest);
             if (token != null) {
-                if (jwtTokenProvider.validateAccessToken(token)) {
-                    UserDetails userDetails = jwtTokenProvider.getUserDetails(token);
-                    Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+                if (jwtTokenProvider.validateServiceToken(token)) {
+                    UserDetails serviceDetails = jwtTokenProvider.getServiceDetails(token);
+                    Authentication auth = new UsernamePasswordAuthenticationToken(serviceDetails, "", serviceDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }

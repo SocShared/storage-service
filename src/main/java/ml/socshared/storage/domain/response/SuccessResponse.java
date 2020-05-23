@@ -1,6 +1,9 @@
-package ml.socshared.auth.domain.response;
+package ml.socshared.storage.domain.response;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @ToString
 @Getter

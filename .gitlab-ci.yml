@@ -34,7 +34,8 @@ docker-deploy-swarm:
     - touch .env_storage
     - echo "SPRING_PROFILE=dev" >> .env_storage
     - echo "POSTGRES_HOST=storage_postgres_db:5436" >> .env_storage
-    - echo "POSTGRES_USER='admin'" >> .env_storage
-    - echo "POSTGRES_PASSWORD='admin'" >> .env_storage
-    - echo "POSTGRES_DB='storage'" >> .env_storage
+    - echo "POSTGRES_USER=admin" >> .env_storage
+    - echo "POSTGRES_PASSWORD=admin" >> .env_storage
+    - echo "POSTGRES_DB=storage" >> .env_storage
+    - echo "AUTH_SERVICE=auth_service" >> .env_storage
     - docker stack deploy -c docker-compose.yaml socshared

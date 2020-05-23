@@ -7,12 +7,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import static ml.socshared.storage.config.Constants.LOCAL_PROFILE;
 import static ml.socshared.storage.config.Constants.TEST_PROFILE;
 
 
 @Configuration
 @EnableWebSecurity
-@Profile({TEST_PROFILE})
+@Profile({TEST_PROFILE, LOCAL_PROFILE})
 @Slf4j
 public class SecurityConfigLocal extends WebSecurityConfigurerAdapter {
 

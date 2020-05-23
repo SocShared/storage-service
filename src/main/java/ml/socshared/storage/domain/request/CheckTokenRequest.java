@@ -1,10 +1,8 @@
-package ml.socshared.auth.domain.request;
+package ml.socshared.storage.domain.request;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.UUID;
 
 @Getter
 @Setter
