@@ -8,7 +8,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
   zipkin:
-    base-url: http://zipkin:9411/
+    base-url: http://zipkin/
     service:
       name: ${spring.application.name}
   main:

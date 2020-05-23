@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://storage_postgres_db:5436/storage
+    url: jdbc:postgresql://storage_postgres_db/storage
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER:admin}
     password: ${POSTGRES_PASSWORD:admin}
@@ -8,7 +8,7 @@ spring:
     hibernate:
       ddl-auto: update
   zipkin:
-    base-url: http://zipkin:9411/
+    base-url: http://zipkin/
     service:
       name: ${spring.application.name}
   main:
