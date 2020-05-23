@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface GroupService {
 
     GroupResponse save(GroupRequest request);
+    void deleteById(UUID groupId);
     GroupResponse findById(UUID groupId);
     Page<GroupModel> findByUserId(UUID userId, Integer page, Integer size);
     Page<GroupModel> findByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork socialNetwork, Integer page, Integer size);

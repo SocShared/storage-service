@@ -54,6 +54,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public void deleteById(UUID groupId) {
+        log.info("removing by group id -> {}", groupId);
+        groupRepository.deleteById(groupId);
+    }
+
+    @Override
     public GroupResponse findById(UUID groupId) {
         log.info("found by id -> {}", groupId);
         return new GroupResponse(groupRepository.findById(groupId)
