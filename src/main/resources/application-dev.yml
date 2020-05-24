@@ -17,4 +17,4 @@ spring:
 
 feign:
   url:
-    mail: ${AUTH_SERVICe:https://auth.socshared.ml}
+    auth: ${AUTH_SERVICE:https://auth.socshared.ml}
