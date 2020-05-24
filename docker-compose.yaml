@@ -8,3 +8,7 @@ services:
       - 8686:8686
     env_file:
       - .env_storage
+
+networks:
+  default:
+    name: socshared
