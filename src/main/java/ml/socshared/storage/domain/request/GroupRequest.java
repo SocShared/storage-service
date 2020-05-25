@@ -13,9 +13,7 @@ public class GroupRequest {
 
     @NotEmpty
     private String userId;
-    @NotEmpty
     private String vkId;
-    @NotEmpty
     private String fbId;
     @NotNull
     private String name;
