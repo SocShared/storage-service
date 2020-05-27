@@ -1,4 +1,4 @@
-package ml.socshared.storage.service.jwt;
+package ml.socshared.storage.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;

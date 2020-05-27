@@ -1,11 +1,11 @@
-package ml.socshared.storage.config.security;
+package ml.socshared.storage.security.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ml.socshared.storage.config.Constants;
-import ml.socshared.storage.config.security.jwt.JwtAuthenticationEntryPoint;
-import ml.socshared.storage.config.security.jwt.JwtConfigurer;
-import ml.socshared.storage.service.jwt.JwtTokenProvider;
+import ml.socshared.storage.security.jwt.JwtAuthenticationEntryPoint;
+import ml.socshared.storage.security.jwt.JwtConfigurer;
+import ml.socshared.storage.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

@@ -1,7 +1,6 @@
-package ml.socshared.storage.config.security.jwt;
+package ml.socshared.storage.security.jwt;
 
 import lombok.RequiredArgsConstructor;
-import ml.socshared.storage.service.jwt.JwtTokenProvider;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;

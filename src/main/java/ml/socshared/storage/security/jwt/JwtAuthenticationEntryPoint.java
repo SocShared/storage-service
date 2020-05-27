@@ -1,4 +1,4 @@
-package ml.socshared.storage.config.security.jwt;
+package ml.socshared.storage.security.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

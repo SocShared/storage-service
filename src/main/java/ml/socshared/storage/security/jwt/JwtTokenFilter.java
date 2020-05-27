@@ -1,7 +1,6 @@
-package ml.socshared.storage.config.security.jwt;
+package ml.socshared.storage.security.jwt;
 
 import lombok.RequiredArgsConstructor;
-import ml.socshared.storage.service.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
