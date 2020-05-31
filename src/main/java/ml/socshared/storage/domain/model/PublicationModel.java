@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import ml.socshared.storage.entity.GroupPostStatus;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,7 +14,8 @@ public interface PublicationModel {
     UUID getPublicationId();
     UUID getUserId();
     String getText();
-    LocalDateTime getPublicationDateTime();
+    Date getPublicationDateTime();
     LocalDateTime getCreatedAt();
+    Set<GroupPostStatus> getPostStatus();
 
 }

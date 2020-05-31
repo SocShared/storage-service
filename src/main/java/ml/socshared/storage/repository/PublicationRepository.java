@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Repository
@@ -21,5 +22,8 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
             "where (p.publicationDateTime is null and gps.postStatus = 'AWAITING') or " +
             "(p.publicationDateTime is not null and p.publicationDateTime < CURRENT_TIME and gps.postStatus = 'AWAITING')")
     Page<PublicationModel> findNotPublishing(Pageable pageable);
+
+    @Query("select p from Publication p where p.publicationDateTime >= :date")
+    Page<PublicationModel> findPublishingAfter(@Param("date") Date date);
 
 }

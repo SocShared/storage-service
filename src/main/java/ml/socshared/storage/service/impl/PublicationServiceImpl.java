@@ -76,4 +76,11 @@ public class PublicationServiceImpl implements PublicationService {
         log.info("find not publishing");
         return publicationRepository.findNotPublishing(PageRequest.of(page, size));
     }
+
+    @Override
+    public Page<PublicationModel> findPublishingAfter(Long date) {
+        log.info("find publications after");
+        Date d = new Date(date);
+        return publicationRepository.findPublishingAfter(d);
+    }
 }
