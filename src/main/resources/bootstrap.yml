@@ -7,7 +7,7 @@ spring:
   application:
     name: socshared-storage-service
   profiles:
-    active: ${SPRING_PROFILE:dev}
+    active: ${SPRING_PROFILE:local}
 
 jwt:
   secret: ${SECRET_JWT_KEY:mWDDrMHQ+QJcTnE+afpVz76HrKkGoKQZHnubc52bYN3/bECi32YNjVbR6EDs6BQsveUIh44ubwcktdPc7Sm9Tg==}

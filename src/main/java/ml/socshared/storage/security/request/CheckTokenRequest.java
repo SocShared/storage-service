@@ -1,4 +1,4 @@
-package ml.socshared.storage.domain.request;
+package ml.socshared.storage.security.request;
 
 import lombok.Getter;
 import lombok.Setter;

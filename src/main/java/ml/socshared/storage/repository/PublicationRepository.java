@@ -24,6 +24,6 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
     Page<PublicationModel> findNotPublishing(Pageable pageable);
 
     @Query("select p from Publication p where p.publicationDateTime >= :date")
-    Page<PublicationModel> findPublishingAfter(@Param("date") Date date);
+    Page<PublicationModel> findPublishingAfter(@Param("date") Date date, Pageable pageable);
 
 }

@@ -35,7 +35,7 @@ public class PublicationController {
     public Page<PublicationModel> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
                                             @NotNull @RequestParam(name = "page", required = false) Integer page,
                                             @NotNull @RequestParam(name = "size", required = false) Integer size) {
-        return publicationService.findPublishingAfter(after);
+        return publicationService.findPublishingAfter(after, page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")

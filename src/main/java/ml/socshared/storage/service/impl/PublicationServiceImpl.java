@@ -78,9 +78,9 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public Page<PublicationModel> findPublishingAfter(Long date) {
+    public Page<PublicationModel> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
-        return publicationRepository.findPublishingAfter(d);
+        return publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
     }
 }
