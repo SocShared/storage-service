@@ -15,12 +15,12 @@ import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +45,15 @@ public class PublicationServiceImpl implements PublicationService {
         publication.setPostType(request.getType());
         publication.setText(request.getText());
         Set<Group> groupSet = publication.getGroups() != null ? publication.getGroups() : new HashSet<>();
+        //TODO NullPointerException при отправке следующего json
+        /*
+        {
+	        "userId": "c8870cd6-e489-4c92-83a3-8075349e161b",
+	        "groupIds": [ "7b8161b9-7851-46d2-9555-fae6639f6dcc"],
+	        "type": "in_real_time",
+	        "text": "Это тестовая публикая для одной группы"
+	       }
+         */
         Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus();
         String[] groupIds = request.getGroupIds();
         for (String groupId : groupIds) {
@@ -82,5 +91,16 @@ public class PublicationServiceImpl implements PublicationService {
         log.info("find publications after");
         Date d = new Date(date);
         return publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<PublicationModel> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
+        log.info("find publication by user id");
+        Optional<Group> g = groupRepository.findById(systemGroupId);
+        if(g.isEmpty()) {
+            throw new HttpNotFoundException("group by id " + systemGroupId + "not found");
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        return publicationRepository.findByGroups(g.get(), pageable);
     }
 }

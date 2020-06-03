@@ -1,6 +1,7 @@
 package ml.socshared.storage.repository;
 
 import ml.socshared.storage.domain.model.PublicationModel;
+import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.Publication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -25,5 +27,7 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
 
     @Query("select p from Publication p where p.publicationDateTime >= :date")
     Page<PublicationModel> findPublishingAfter(@Param("date") Date date, Pageable pageable);
+
+    Page<PublicationModel> findByGroups(Group g, Pageable pageable);
 
 }
