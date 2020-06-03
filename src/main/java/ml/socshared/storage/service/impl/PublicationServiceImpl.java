@@ -45,6 +45,15 @@ public class PublicationServiceImpl implements PublicationService {
         publication.setPostType(request.getType());
         publication.setText(request.getText());
         Set<Group> groupSet = publication.getGroups() != null ? publication.getGroups() : new HashSet<>();
+        //TODO NullPointerException при отправке следующего json
+        /*
+        {
+	        "userId": "c8870cd6-e489-4c92-83a3-8075349e161b",
+	        "groupIds": [ "7b8161b9-7851-46d2-9555-fae6639f6dcc"],
+	        "type": "in_real_time",
+	        "text": "Это тестовая публикая для одной группы"
+	       }
+         */
         Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus();
         String[] groupIds = request.getGroupIds();
         for (String groupId : groupIds) {
