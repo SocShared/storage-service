@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -43,6 +44,15 @@ public class PublicationController {
     public Page<PublicationModel> findNotPublishing(@NotNull @RequestParam(name = "page", required = false) Integer page,
                                                     @NotNull @RequestParam(name = "size", required = false) Integer size) {
         return publicationService.findNotPublishing(page, size);
+    }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @GetMapping(value = "/private/groups/{systemGroupId}/publications/status/not_publishing")
+    public Page<PublicationModel> findByGroupId(@PathVariable UUID systemGroupId,
+                                                @NotNull @RequestParam(name = "page", required = false) Integer page,
+                                                @NotNull @RequestParam(name = "size", required = false) Integer size)
+    {
+            return publicationService.findByGroupId(systemGroupId, page, size);
     }
 
 }

@@ -17,10 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -82,5 +79,17 @@ public class PublicationServiceImpl implements PublicationService {
         log.info("find publications after");
         Date d = new Date(date);
         return publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
+    }
+
+    @Override
+    public Page<PublicationModel> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
+        log.info("find publication by user id");
+        Optional<Group> g = groupRepository.findById(systemGroupId);
+        if(g.isEmpty()) {
+            throw new HttpNotFoundException("group by id " + systemGroupId + "not found");
+        }
+        Set<Group> s = new HashSet<>();
+        s.add(g.get());
+        return publicationRepository.findByGroups(s);
     }
 }
