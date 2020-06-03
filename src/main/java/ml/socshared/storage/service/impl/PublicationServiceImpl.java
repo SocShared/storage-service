@@ -15,8 +15,11 @@ import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -88,8 +91,7 @@ public class PublicationServiceImpl implements PublicationService {
         if(g.isEmpty()) {
             throw new HttpNotFoundException("group by id " + systemGroupId + "not found");
         }
-        Set<Group> s = new HashSet<>();
-        s.add(g.get());
-        return publicationRepository.findByGroups(s);
+        Pageable pageable = PageRequest.of(page, size);
+        return publicationRepository.findByGroups(g.get(), pageable);
     }
 }

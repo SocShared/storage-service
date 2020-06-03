@@ -28,7 +28,7 @@ public class GroupServiceImpl implements GroupService {
         log.info("saving -> {}", request);
 
         boolean groupVkIsConnect = groupRepository.findByUserIdAndVkId(UUID.fromString(request.getUserId()), request.getVkId()).orElse(null) != null;
-        boolean groupFbIsConnect = groupRepository.findByUserIdAndFacebookId(UUID.fromString(request.getFbId()), request.getFbId()).orElse(null) != null;
+        boolean groupFbIsConnect = groupRepository.findByUserIdAndFacebookId(UUID.fromString(request.getUserId()), request.getFbId()).orElse(null) != null;
 
         if (groupFbIsConnect && request.getSocialNetwork() == Group.SocialNetwork.FACEBOOK)
             throw new GroupIsAlreadyConnectedException(String.format("Group FB (%s) is already connected.", request.getFbId()));

@@ -28,6 +28,6 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
     @Query("select p from Publication p where p.publicationDateTime >= :date")
     Page<PublicationModel> findPublishingAfter(@Param("date") Date date, Pageable pageable);
 
-    Page<PublicationModel> findByGroups(Set<Group> g);
+    Page<PublicationModel> findByGroups(Group g, Pageable pageable);
 
 }
