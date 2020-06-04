@@ -44,6 +44,7 @@ public class PublicationServiceImpl implements PublicationService {
         publication.setUserId(UUID.fromString(request.getUserId()));
         publication.setPostType(request.getType());
         publication.setText(request.getText());
+
         Set<Group> groupSet = publication.getGroups() != null ? publication.getGroups() : new HashSet<>();
         //TODO NullPointerException при отправке следующего json
         /*
@@ -54,7 +55,7 @@ public class PublicationServiceImpl implements PublicationService {
 	        "text": "Это тестовая публикая для одной группы"
 	       }
          */
-        Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus();
+        Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus() != null ? publication.getPostStatus() : new HashSet<>();
         String[] groupIds = request.getGroupIds();
         for (String groupId : groupIds) {
             groupSet.add(groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId)));

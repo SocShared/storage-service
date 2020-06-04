@@ -37,5 +37,5 @@ docker-deploy-swarm:
     - echo "POSTGRES_USER=admin" >> .env_storage
     - echo "POSTGRES_PASSWORD=admin" >> .env_storage
     - echo "POSTGRES_DB=storage" >> .env_storage
-    - echo "AUTH_SERVICE=auth_service" >> .env_storage
+    - echo "AUTH_SERVICE=http://auth-service:9999" >> .env_storage
     - docker stack deploy -c docker-compose.yaml socshared

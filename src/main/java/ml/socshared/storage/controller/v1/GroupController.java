@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -35,16 +37,16 @@ public class GroupController implements GroupApi {
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/users/{userId}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<GroupModel> findByUserId(@PathVariable UUID userId,
-                                                   @NotNull @RequestParam(name = "page", required = false) Integer page,
-                                                   @NotNull @RequestParam(name = "size", required = false) Integer size) {
+                                         @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
+                                         @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
         return service.findByUserId(userId, page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/users/{userId}/groups/social_network/{socialNetwork}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<GroupModel> findByUserIdAndSocialNetwork(@PathVariable UUID userId, @PathVariable Group.SocialNetwork socialNetwork,
-                                                   @NotNull @RequestParam(name = "page", required = false) Integer page,
-                                                   @NotNull @RequestParam(name = "size", required = false) Integer size) {
+                                                         @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
+                                                         @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
         return service.findByUserIdAndSocialNetwork(userId, socialNetwork, page, size);
     }
 
