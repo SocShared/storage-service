@@ -1,5 +1,6 @@
 package ml.socshared.storage.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import ml.socshared.storage.domain.model.GroupModel;
 import ml.socshared.storage.entity.Group;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 @Setter
 @ToString
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupResponse {
 
     private String groupId;
