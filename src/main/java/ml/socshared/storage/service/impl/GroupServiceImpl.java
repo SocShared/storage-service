@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -57,6 +58,18 @@ public class GroupServiceImpl implements GroupService {
     public void deleteById(UUID groupId) {
         log.info("removing by group id -> {}", groupId);
         groupRepository.deleteById(groupId);
+    }
+
+    @Override
+    public void deleteByVkId(UUID userId, String vkId) {
+        log.info("removing by vk id -> {}", vkId);
+        groupRepository.findByUserIdAndVkId(userId, vkId).ifPresent(groupRepository::delete);
+    }
+
+    @Override
+    public void deleteByFbId(UUID userId, String fbId) {
+        log.info("removing by fb id -> {}", fbId);
+        groupRepository.findByUserIdAndFacebookId(userId, fbId).ifPresent(groupRepository::delete);
     }
 
     @Override

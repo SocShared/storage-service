@@ -73,4 +73,16 @@ public class GroupController implements GroupApi {
     public void deleteById(@PathVariable UUID groupId) {
         service.deleteById(groupId);
     }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @DeleteMapping(value = "/private/users/{userId}/groups/facebook/{fbId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteByFBId(@PathVariable UUID userId, @PathVariable String fbId) {
+        service.deleteByFbId(userId, fbId);
+    }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @DeleteMapping(value = "/private/users/{userId}/groups/vk/{vkId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteByVkId(@PathVariable UUID userId, @PathVariable String vkId) {
+        service.deleteByVkId(userId, vkId);
+    }
 }
