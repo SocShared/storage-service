@@ -18,7 +18,7 @@ public class GroupResponse {
     private Group.SocialNetwork socialNetwork;
     private String name;
     private String vkId;
-    private String fbId;
+    private String facebookId;
     private String userId;
 
     public GroupResponse() {}
@@ -28,7 +28,7 @@ public class GroupResponse {
         this.socialNetwork = group.getSocialNetwork();
         this.name = group.getName();
         this.vkId = group.getVkId();
-        this.fbId = group.getFacebookId();
+        this.facebookId = group.getFacebookId();
         this.userId = group.getUserId().toString();
     }
 
