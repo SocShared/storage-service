@@ -2,6 +2,7 @@ package ml.socshared.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,14 +29,18 @@ public class GroupPostStatus {
     private PostStatus postStatus;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "publication_id", referencedColumnName = "publication_id")
     private Publication publication;
 
     public enum PostStatus {
+        @JsonProperty("published")
         PUBLISHED,
+        @JsonProperty("awaiting")
         AWAITING,
+        @JsonProperty("not_successful")
         NOT_SUCCESSFUL,
+        @JsonProperty("processing")
         PROCESSING
     }
 
