@@ -28,8 +28,8 @@ public class GroupServiceImpl implements GroupService {
     public GroupResponse save(GroupRequest request) {
         log.info("saving -> {}", request);
 
-        boolean groupVkIsConnect = groupRepository.findByUserIdAndVkId(UUID.fromString(request.getUserId()), request.getVkId()).orElse(null) != null;
-        boolean groupFbIsConnect = groupRepository.findByUserIdAndFacebookId(UUID.fromString(request.getUserId()), request.getFbId()).orElse(null) != null;
+        boolean groupVkIsConnect = groupRepository.findDistinctTopByUserIdAndVkId(UUID.fromString(request.getUserId()), request.getVkId()).orElse(null) != null;
+        boolean groupFbIsConnect = groupRepository.findDistinctTopByUserIdAndFacebookId(UUID.fromString(request.getUserId()), request.getFbId()).orElse(null) != null;
 
         if (groupFbIsConnect && request.getSocialNetwork() == Group.SocialNetwork.FACEBOOK)
             throw new GroupIsAlreadyConnectedException(String.format("Group FB (%s) is already connected.", request.getFbId()));
@@ -63,13 +63,13 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteByVkId(UUID userId, String vkId) {
         log.info("removing by vk id -> {}", vkId);
-        groupRepository.findByUserIdAndVkId(userId, vkId).ifPresent(groupRepository::delete);
+        groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId).ifPresent(groupRepository::delete);
     }
 
     @Override
     public void deleteByFbId(UUID userId, String fbId) {
         log.info("removing by fb id -> {}", fbId);
-        groupRepository.findByUserIdAndFacebookId(userId, fbId).ifPresent(groupRepository::delete);
+        groupRepository.findDistinctTopByUserIdAndFacebookId(userId, fbId).ifPresent(groupRepository::delete);
     }
 
     @Override
@@ -94,14 +94,14 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupResponse findByUserIdAndVkId(UUID userId, String vkId) {
         log.info("found by user id and vk id -> {}, {}", userId, vkId);
-        return new GroupResponse(groupRepository.findByUserIdAndVkId(userId, vkId)
+        return new GroupResponse(groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and vk id")));
     }
 
     @Override
     public GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId) {
         log.info("found by user id and facebook id -> {}, {}", userId, facebookId);
-        return new GroupResponse(groupRepository.findByUserIdAndFacebookId(userId, facebookId)
+        return new GroupResponse(groupRepository.findDistinctTopByUserIdAndFacebookId(userId, facebookId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook id")));
     }
 }
