@@ -58,6 +58,7 @@ public class PublicationServiceImpl implements PublicationService {
                     break;
                 }
             }
+            groupPostStatuses.remove(result);
             if (result != null) {
                 result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
             } else {
@@ -66,6 +67,7 @@ public class PublicationServiceImpl implements PublicationService {
                 result.setGroupId(UUID.fromString(groupId));
                 result.setPublication(publication);
             }
+            groupPostStatuses.add(result);
         }
         publication.setGroups(groupSet);
         publication.setPostStatus(groupPostStatuses);

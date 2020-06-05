@@ -13,6 +13,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+feign:
+  url:
+    auth: ${AUTH_SERVICE:https://auth.socshared.ml}
+
 management:
   endpoints:
     web:
