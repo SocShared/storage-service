@@ -29,7 +29,7 @@ public class PublicationController {
     @PreAuthorize("hasRole('SERVICE')")
     @PostMapping(value = "/private/publications", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public PublicationResponse save(@RequestBody @Valid PublicationRequest request) {
+    public PublicationResponse save(@RequestBody PublicationRequest request) {
         return publicationService.save(request);
     }
 
