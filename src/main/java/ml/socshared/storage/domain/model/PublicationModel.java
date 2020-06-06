@@ -2,6 +2,7 @@ package ml.socshared.storage.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ml.socshared.storage.entity.GroupPostStatus;
+import ml.socshared.storage.entity.Publication;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -16,6 +17,7 @@ public interface PublicationModel {
     String getText();
     Date getPublicationDateTime();
     LocalDateTime getCreatedAt();
+    Publication.PostType getPostType();
     Set<GroupPostStatus> getPostStatus();
 
 }

@@ -36,23 +36,23 @@ public class PublicationController {
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/publications")
     public Page<PublicationModel> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
-                                            @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
-                                            @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
+                                            @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                            @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
         return publicationService.findPublishingAfter(after, page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/publications/status/not_publishing")
-    public Page<PublicationModel> findNotPublishing(@Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
-                                                    @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
+    public Page<PublicationModel> findNotPublishing(@Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                    @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
         return publicationService.findNotPublishing(page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/groups/{systemGroupId}/publications/status/not_publishing")
     public Page<PublicationModel> findByGroupId(@PathVariable UUID systemGroupId,
-                                                @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
-                                                @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size)
+                                                @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size)
     {
             return publicationService.findByGroupId(systemGroupId, page, size);
     }
