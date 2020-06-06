@@ -22,7 +22,7 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
 
     @Query("select p from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and ((p.publicationDateTime is null and gps.postStatus = 'AWAITING') or (p.postType = 'DEFERRED' and " +
-            " p.publicationDateTime is not null and gps.postStatus = 'AWAITING'))")
+            " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP))")
     Page<PublicationModel> findNotPublishing(Pageable pageable);
 
     @Query("select p from Publication p where p.publicationDateTime >= :date")
