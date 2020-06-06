@@ -26,7 +26,7 @@ public class PublicationResponse {
     private String text;
     private Date publicationDateTime;
     private LocalDateTime createdAt;
-    private Publication.PostType type;
+    private Publication.PostType postType;
     private Set<GroupPostStatus> postStatus;
 
     public PublicationResponse() {}
@@ -36,7 +36,7 @@ public class PublicationResponse {
         this.userId = publication.getUserId();
         this.text = publication.getText();
         this.publicationDateTime = publication.getPublicationDateTime();
-        this.type = publication.getPostType();
+        this.postType = publication.getPostType();
         this.createdAt = publication.getCreatedAt();
         this.postStatus = publication.getPostStatus();
     }
