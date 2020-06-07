@@ -37,8 +37,8 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = request.getPublicationId() != null ?
                 publicationRepository.findById(UUID.fromString(request.getPublicationId())).orElse(new Publication()) : new Publication();
         if (request.getPublicationDateTime() != null) {
-            if (request.getPublicationDateTime().before(new Date()))
-                throw new IncorrectDateException("date must be later than the current date");
+//            if (request.getPublicationDateTime().before(new Date()))
+//                throw new IncorrectDateException("date must be later than the current date");
             publication.setPublicationDateTime(request.getPublicationDateTime());
         }
         publication.setUserId(UUID.fromString(request.getUserId()));
