@@ -9,17 +9,14 @@ import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
 import ml.socshared.storage.exception.impl.HttpNotFoundException;
-import ml.socshared.storage.exception.impl.IncorrectDateException;
 import ml.socshared.storage.repository.GroupRepository;
 import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -78,14 +75,14 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public Page<PublicationModel> findNotPublishing(Integer page, Integer size) {
         log.info("find not publishing");
-        return publicationRepository.findNotPublishing(PageRequest.of(page, size));
+        return publicationRepository.findDistinctNotPublishing(PageRequest.of(page, size));
     }
 
     @Override
     public Page<PublicationModel> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
-        return publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
+        return publicationRepository.findDistinctPublishingAfter(d, PageRequest.of(page, size));
     }
 
     @Override

@@ -17,16 +17,16 @@ import java.util.UUID;
 @Repository
 public interface PublicationRepository extends JpaRepository<Publication, UUID> {
 
-    @Query("select distinct p from Publication p join Group g where p.userId = :userId and g.userId = :userId and g.groupId = :groupId")
-    Page<PublicationModel> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
+    @Query("select p from Publication p join Group g where p.userId = :userId and g.userId = :userId and g.groupId = :groupId")
+    Page<PublicationModel> findDistinctByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
 
-    @Query("select distinct p from Publication p, GroupPostStatus gps " +
+    @Query("select p from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and ((p.publicationDateTime is null and gps.postStatus = 'AWAITING') or (p.postType = 'DEFERRED' and " +
             " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP))")
-    Page<PublicationModel> findNotPublishing(Pageable pageable);
+    Page<PublicationModel> findDistinctNotPublishing(Pageable pageable);
 
-    @Query("select distinct p from Publication p where p.publicationDateTime >= :date")
-    Page<PublicationModel> findPublishingAfter(@Param("date") Date date, Pageable pageable);
+    @Query("select p from Publication p where p.publicationDateTime >= :date")
+    Page<PublicationModel> findDistinctPublishingAfter(@Param("date") Date date, Pageable pageable);
 
     Page<PublicationModel> findByGroups(Group g, Pageable pageable);
 
