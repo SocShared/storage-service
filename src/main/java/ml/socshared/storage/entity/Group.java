@@ -37,7 +37,7 @@ public class Group extends BaseEntity {
     private String vkId;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Publication> publications;
 
     public enum SocialNetwork {
