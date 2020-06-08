@@ -82,7 +82,7 @@ public class PublicationServiceImpl implements PublicationService {
     public Page<PublicationModel> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
-        return publicationRepository.findDistinctByPublishingAfter(d, PageRequest.of(page, size));
+        return publicationRepository.findByPublishingAfter(d, PageRequest.of(page, size));
     }
 
     @Override
