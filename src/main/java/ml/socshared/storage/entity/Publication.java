@@ -2,6 +2,7 @@ package ml.socshared.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import ml.socshared.storage.entity.base.BaseEntity;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "publications")
+@EqualsAndHashCode(callSuper = false)
 public class Publication extends BaseEntity {
 
     @Id
