@@ -11,7 +11,9 @@ before_script:
 
 build:
   stage: build
-  script: ./gradlew clean build
+  script:
+    - docker 2>/dev/null 1>&2 rmi `docker images -aq` || true
+    - ./gradlew clean build
   artifacts:
     paths:
       - build/libs/socshared-storage-service-1.0.0-SNAPSHOT.jar
@@ -19,7 +21,6 @@ build:
 docker-build:
   stage: docker-build
   script:
-    - docker 2>/dev/null 1>&2 rmi `docker images -aq` || true
     - docker build -t $CI_DOCKER_LOGIN/socshared-storage-service .
 
 docker-push:
