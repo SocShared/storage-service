@@ -2,7 +2,6 @@ package ml.socshared.storage.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ml.socshared.storage.domain.model.PublicationModel;
 import ml.socshared.storage.domain.request.PublicationRequest;
 import ml.socshared.storage.domain.response.PublicationResponse;
 import ml.socshared.storage.entity.Group;
@@ -79,7 +78,7 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public Page<Publication> findPublishingAfter(Long date, Integer page, Integer size) {
+    public Page<PublicationResponse> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
         return publicationRepository.findByPublishingAfter(d, PageRequest.of(page, size));

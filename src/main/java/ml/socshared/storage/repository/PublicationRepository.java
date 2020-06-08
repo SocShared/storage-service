@@ -1,6 +1,7 @@
 package ml.socshared.storage.repository;
 
 import ml.socshared.storage.domain.model.PublicationModel;
+import ml.socshared.storage.domain.response.PublicationResponse;
 import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.Publication;
 import org.springframework.data.domain.Page;
@@ -25,10 +26,10 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
             " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP))")
     Page<Publication> findNotPublishing(Pageable pageable);
 
-    @Query("select distinct p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType" +
+    @Query("select distinct new ml.socshared.storage.domain.response.PublicationResponse(p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType, gps.groupId, gps.postStatus)" +
             " from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and gps.postStatus = 'PUBLISHED' and p.publicationDateTime >= :date")
-    Page<Publication> findByPublishingAfter(@Param("date") Date date, Pageable pageable);
+    Page<PublicationResponse> findByPublishingAfter(@Param("date") Date date, Pageable pageable);
 
     @Query("select distinct p, gps from Publication p, GroupPostStatus gps where gps.publication = p and gps.groupId = :groupId")
     Page<Publication> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
