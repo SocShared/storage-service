@@ -10,14 +10,15 @@ import java.util.Set;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface PublicationModel {
+public class PublicationModel {
 
-    UUID getPublicationId();
-    UUID getUserId();
-    String getText();
-    Date getPublicationDateTime();
-    LocalDateTime getCreatedAt();
-    Publication.PostType getPostType();
-    Set<GroupPostStatus> getPostStatus();
+    UUID publicationId;
+    UUID userId;
+    String text;
+    Date publicationDateTime;
+    LocalDateTime createdAt;
+    Publication.PostType postType;
+    UUID groupId;
+    GroupPostStatus.PostStatus postStatus;
 
 }

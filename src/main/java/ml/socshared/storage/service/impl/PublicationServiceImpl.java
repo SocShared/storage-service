@@ -13,7 +13,6 @@ import ml.socshared.storage.repository.GroupRepository;
 import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -76,35 +75,20 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public Page<PublicationModel> findNotPublishing(Integer page, Integer size) {
         log.info("find not publishing");
-        Page<PublicationModel> modelPage = publicationRepository.findNotPublishing(PageRequest.of(page, size));
-        return new PageImpl<>(
-                new ArrayList<>(new LinkedHashSet<>(modelPage.getContent())),
-                modelPage.getPageable(),
-                modelPage.getTotalElements()
-        );
+        return publicationRepository.findNotPublishing(PageRequest.of(page, size));
     }
 
     @Override
     public Page<PublicationModel> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
-        Page<PublicationModel> modelPage = publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
-        return new PageImpl<>(
-                new ArrayList<>(new LinkedHashSet<>(modelPage.getContent())),
-                modelPage.getPageable(),
-                modelPage.getTotalElements()
-        );
+        return publicationRepository.findPublishingAfter(d, PageRequest.of(page, size));
     }
 
     @Override
     public Page<PublicationModel> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
         log.info("find publication by user id");
         Pageable pageable = PageRequest.of(page, size);
-        Page<PublicationModel> modelPage = publicationRepository.findByGroupId(systemGroupId, pageable);
-        return new PageImpl<>(
-                new ArrayList<>(new LinkedHashSet<>(modelPage.getContent())),
-                modelPage.getPageable(),
-                modelPage.getTotalElements()
-        );
+        return publicationRepository.findByGroupId(systemGroupId, pageable);
     }
 }

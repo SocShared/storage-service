@@ -17,19 +17,23 @@ import java.util.UUID;
 @Repository
 public interface PublicationRepository extends JpaRepository<Publication, UUID> {
 
-    @Query("select p from Publication p join Group g where p.userId = :userId and g.userId = :userId and g.groupId = :groupId")
+    @Query("select distinct p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType, gps.groupId, gps.postStatus" +
+            " from Publication p, GroupPostStatus gps where p.userId = :userId and p.userId = :userId and gps.groupId = :groupId")
     Page<PublicationModel> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
 
-    @Query("select p from Publication p, GroupPostStatus gps " +
+    @Query("select distinct p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType, gps.groupId, gps.postStatus" +
+            " from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and ((p.publicationDateTime is null and gps.postStatus = 'AWAITING') or (p.postType = 'DEFERRED' and " +
             " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP))")
     Page<PublicationModel> findNotPublishing(Pageable pageable);
 
-    @Query("select p from Publication p, GroupPostStatus gps " +
+    @Query("select distinct p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType, gps.groupId, gps.postStatus" +
+            " from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and gps.postStatus = 'PUBLISHED' and p.publicationDateTime >= :date")
     Page<PublicationModel> findPublishingAfter(@Param("date") Date date, Pageable pageable);
 
-    @Query("select p, gps from Publication p, GroupPostStatus gps where gps.publication = p and gps.groupId = :groupId")
+    @Query("select distinct p.publicationId, p.userId, p.text, p.publicationDateTime, p.createdAt, p.postType, gps.groupId, gps.postStatus" +
+            " from Publication p, GroupPostStatus gps where gps.publication = p and gps.groupId = :groupId")
     Page<PublicationModel> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
 
 }
