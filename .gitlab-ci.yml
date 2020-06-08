@@ -33,7 +33,7 @@ docker-deploy-swarm:
   script:
     - touch .env_storage
     - echo "SPRING_PROFILE=dev" >> .env_storage
-    - echo "POSTGRES_HOST=pg.socshared.ml:5533" >> .env_storage
+    - echo "POSTGRES_HOST=postgres-db" >> .env_storage
     - echo "POSTGRES_USER=admin" >> .env_storage
     - echo "POSTGRES_PASSWORD=admin" >> .env_storage
     - echo "POSTGRES_DB=storage" >> .env_storage
