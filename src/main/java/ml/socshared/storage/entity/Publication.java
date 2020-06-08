@@ -32,7 +32,6 @@ public class Publication extends BaseEntity {
     private String text;
 
     @JsonIgnore
-    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "publications_groups",
             joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "publication_id"),
