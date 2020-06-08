@@ -11,6 +11,6 @@ public interface PublicationService {
 
     PublicationResponse save(PublicationRequest request);
     Page<Publication> findNotPublishing(Integer page, Integer size);
-    Page<PublicationResponse> findPublishingAfter(Long date, Integer page, Integer size);
+    Page<Publication> findPublishingAfter(Long date, Integer page, Integer size);
     Page<Publication> findByGroupId(UUID systemGroupId, Integer page, Integer size);
 }
