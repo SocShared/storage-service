@@ -14,7 +14,6 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "group_post_status")
-@EqualsAndHashCode
 public class GroupPostStatus {
 
     @Id

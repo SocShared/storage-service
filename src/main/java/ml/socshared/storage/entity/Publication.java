@@ -17,7 +17,6 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "publications")
-@EqualsAndHashCode(callSuper = false)
 public class Publication extends BaseEntity {
 
     @Id
