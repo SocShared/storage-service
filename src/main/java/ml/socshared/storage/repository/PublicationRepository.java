@@ -18,18 +18,18 @@ import java.util.UUID;
 public interface PublicationRepository extends JpaRepository<Publication, UUID> {
 
     @Query("select p from Publication p join Group g where p.userId = :userId and g.userId = :userId and g.groupId = :groupId")
-    Page<PublicationModel> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
+    Page<Publication> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
 
-    @Query("select distinct p, gps from Publication p, GroupPostStatus gps " +
+    @Query("select p from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and ((p.publicationDateTime is null and gps.postStatus = 'AWAITING') or (p.postType = 'DEFERRED' and " +
             " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP))")
-    Page<PublicationModel> findNotPublishing(Pageable pageable);
+    Page<Publication> findNotPublishing(Pageable pageable);
 
-    @Query("select distinct p, gps from Publication p, GroupPostStatus gps " +
+    @Query("select distinct p from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and gps.postStatus = 'PUBLISHED' and p.publicationDateTime >= :date")
-    Page<PublicationModel> findByPublishingAfter(@Param("date") Date date, Pageable pageable);
+    Page<Publication> findByPublishingAfter(@Param("date") Date date, Pageable pageable);
 
     @Query("select distinct p, gps from Publication p, GroupPostStatus gps where gps.publication = p and gps.groupId = :groupId")
-    Page<PublicationModel> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
+    Page<Publication> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
 
 }

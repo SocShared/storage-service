@@ -73,20 +73,20 @@ public class PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public Page<PublicationModel> findNotPublishing(Integer page, Integer size) {
+    public Page<Publication> findNotPublishing(Integer page, Integer size) {
         log.info("find not publishing");
         return publicationRepository.findNotPublishing(PageRequest.of(page, size));
     }
 
     @Override
-    public Page<PublicationModel> findPublishingAfter(Long date, Integer page, Integer size) {
+    public Page<Publication> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
         return publicationRepository.findByPublishingAfter(d, PageRequest.of(page, size));
     }
 
     @Override
-    public Page<PublicationModel> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
+    public Page<Publication> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
         log.info("find publication by user id");
         Pageable pageable = PageRequest.of(page, size);
         return publicationRepository.findByGroupId(systemGroupId, pageable);
