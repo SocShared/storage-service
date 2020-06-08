@@ -36,7 +36,7 @@ public class PublicationController {
 
     @PreAuthorize("hasRole('SERVICE')")
     @GetMapping(value = "/private/publications/status/published", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<PublicationResponse> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
+    public Page<Publication> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
                                             @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                             @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
         return publicationService.findPublishingAfter(after, page, size);
