@@ -88,11 +88,7 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public Page<PublicationModel> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
         log.info("find publication by user id");
-        Optional<Group> g = groupRepository.findById(systemGroupId);
-        if(g.isEmpty()) {
-            throw new HttpNotFoundException("group by id " + systemGroupId + "not found");
-        }
         Pageable pageable = PageRequest.of(page, size);
-        return publicationRepository.findByGroups(g.get(), pageable);
+        return publicationRepository.findByGroupId(systemGroupId, pageable);
     }
 }

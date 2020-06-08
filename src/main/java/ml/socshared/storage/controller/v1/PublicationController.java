@@ -34,7 +34,7 @@ public class PublicationController {
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/publications")
+    @GetMapping(value = "/private/publications/status/published", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<PublicationModel> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
                                             @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                             @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
@@ -42,18 +42,17 @@ public class PublicationController {
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/publications/status/not_publishing")
+    @GetMapping(value = "/private/publications/status/not_publishing", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<PublicationModel> findNotPublishing(@Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                     @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
         return publicationService.findNotPublishing(page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/groups/{systemGroupId}/publications/status/not_publishing")
+    @GetMapping(value = "/private/groups/{systemGroupId}/publications", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<PublicationModel> findByGroupId(@PathVariable UUID systemGroupId,
                                                 @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size)
-    {
+                                                @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
             return publicationService.findByGroupId(systemGroupId, page, size);
     }
 
