@@ -18,7 +18,6 @@ public interface PublicationModel {
     Date getPublicationDateTime();
     LocalDateTime getCreatedAt();
     Publication.PostType getPostType();
-    UUID getGroupId();
-    GroupPostStatus.PostStatus getPostStatus();
+    Set<GroupPostStatus> getPostStatus();
 
 }
