@@ -27,8 +27,6 @@ public class PublicationResponse {
     private Date publicationDateTime;
     private LocalDateTime createdAt;
     private Publication.PostType postType;
-    private UUID groupId;
-    private GroupPostStatus.PostStatus status;
     private Set<GroupPostStatus> postStatus;
 
     public PublicationResponse() {}
@@ -43,21 +41,4 @@ public class PublicationResponse {
         this.postStatus = publication.getPostStatus();
     }
 
-    public PublicationResponse(UUID publicationId,
-                               UUID userId,
-                               String text,
-                               Date publicationDateTime,
-                               LocalDateTime createdAt,
-                               Publication.PostType postType,
-                               UUID groupId,
-                               GroupPostStatus.PostStatus status) {
-        this.publicationId = publicationId;
-        this.userId = userId;
-        this.text = text;
-        this.publicationDateTime = publicationDateTime;
-        this.createdAt = createdAt;
-        this.postType = postType;
-        this.groupId = groupId;
-        this.status = status;
-    }
 }
