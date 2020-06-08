@@ -1,5 +1,6 @@
 package ml.socshared.storage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ public class Publication extends BaseEntity {
     @Column(name = "text", length = 15000, nullable = false)
     private String text;
 
+    @JsonIgnore
     @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "publications_groups",

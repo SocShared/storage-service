@@ -1,6 +1,7 @@
 package ml.socshared.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ public class Group extends BaseEntity {
     @Column(name = "vk_id")
     private String vkId;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Publication> publications;
 
