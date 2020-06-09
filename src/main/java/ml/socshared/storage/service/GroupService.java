@@ -19,5 +19,7 @@ public interface GroupService {
     Page<GroupModel> findByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork socialNetwork, Integer page, Integer size);
     GroupResponse findByUserIdAndVkId(UUID userId, String vkId);
     GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId);
+    void deleteVkGroupsByUserId(UUID userId);
+    void deleteFacebookGroupsByUserId(UUID userId);
 
 }

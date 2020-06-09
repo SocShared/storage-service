@@ -104,4 +104,16 @@ public class GroupServiceImpl implements GroupService {
         return new GroupResponse(groupRepository.findDistinctTopByUserIdAndFacebookId(userId, facebookId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook id")));
     }
+
+    @Override
+    public void deleteVkGroupsByUserId(UUID userId) {
+        log.info("removing groups vk by user id -> {}", userId);
+        groupRepository.deleteVkGroupsByUserId(userId);
+    }
+
+    @Override
+    public void deleteFacebookGroupsByUserId(UUID userId) {
+        log.info("removing groups facebook by user id -> {}", userId);
+        groupRepository.deleteFacebookGroupsByUserId(userId);
+    }
 }
