@@ -11,6 +11,8 @@ import ml.socshared.storage.exception.impl.HttpNotFoundException;
 import ml.socshared.storage.repository.GroupRepository;
 import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
+import ml.socshared.storage.service.sentry.SentrySender;
+import ml.socshared.storage.service.sentry.SentryTag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ public class PublicationServiceImpl implements PublicationService {
 
     private final GroupRepository groupRepository;
     private final PublicationRepository publicationRepository;
+    private final SentrySender sentrySender;
 
     @Override
     public PublicationResponse save(PublicationRequest request) {
@@ -33,8 +36,6 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = request.getPublicationId() != null ?
                 publicationRepository.findById(UUID.fromString(request.getPublicationId())).orElse(new Publication()) : new Publication();
         if (request.getPublicationDateTime() != null) {
-//            if (request.getPublicationDateTime().before(new Date()))
-//                throw new IncorrectDateException("date must be later than the current date");
             publication.setPublicationDateTime(request.getPublicationDateTime());
         }
         publication.setUserId(UUID.fromString(request.getUserId()));
@@ -67,26 +68,52 @@ public class PublicationServiceImpl implements PublicationService {
         publication.setGroups(groupSet);
         publication.setPostStatus(groupPostStatuses);
 
-        return new PublicationResponse(publicationRepository.save(publication));
+        PublicationResponse response = new PublicationResponse(publicationRepository.save(publication));
+
+        Map<String, Object> additionData = new HashMap<>();
+        additionData.put("publication", response);
+        sentrySender.sentryMessage("save publication", additionData, Collections.singletonList(SentryTag.SAVE_PUBLICATION));
+
+        return response;
     }
 
     @Override
     public Page<Publication> findNotPublishing(Integer page, Integer size) {
         log.info("find not publishing");
-        return publicationRepository.findNotPublishing(PageRequest.of(page, size));
+
+        Page<Publication> result = publicationRepository.findNotPublishing(PageRequest.of(page, size));
+
+        Map<String, Object> additionData = new HashMap<>();
+        sentrySender.sentryMessage("get publications not publishing", additionData, Collections.singletonList(SentryTag.GET_NOT_PUBLISHING_PUBLICATION));
+
+        return result;
     }
 
     @Override
     public Page<Publication> findPublishingAfter(Long date, Integer page, Integer size) {
         log.info("find publications after");
         Date d = new Date(date);
-        return publicationRepository.findByPublishingAfter(d, PageRequest.of(page, size));
+
+        Page<Publication> result = publicationRepository.findByPublishingAfter(d, PageRequest.of(page, size));
+
+        Map<String, Object> additionData = new HashMap<>();
+        sentrySender.sentryMessage("get publications after " + d.getDay() + "." + d.getMonth() + "." + d.getYear() + " "
+                + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(),
+                additionData, Collections.singletonList(SentryTag.GET_PUBLISHING_AFTER_PUBLICATION));
+
+        return result;
     }
 
     @Override
     public Page<Publication> findByGroupId(UUID systemGroupId, Integer page, Integer size) {
         log.info("find publication by user id");
         Pageable pageable = PageRequest.of(page, size);
-        return publicationRepository.findByGroupId(systemGroupId, pageable);
+
+        Page<Publication> result = publicationRepository.findByGroupId(systemGroupId, pageable);
+
+        Map<String, Object> additionData = new HashMap<>();
+        sentrySender.sentryMessage("get publications by group id " + systemGroupId, additionData, Collections.singletonList(SentryTag.GET_PUBLISHING_AFTER_PUBLICATION));
+
+        return result;
     }
 }

@@ -30,6 +30,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.10.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.10.5'
 
+    // Sentry
+    implementation 'io.sentry:sentry-spring:1.7.23'
+    implementation 'io.sentry:sentry:1.7.23'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
