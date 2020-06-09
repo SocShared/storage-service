@@ -5,9 +5,11 @@ import ml.socshared.storage.entity.Group;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +21,9 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
     Page<GroupModel> findByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork social, Pageable pageable);
     Optional<Group> findDistinctTopByUserIdAndVkId(UUID userId, String vkId);
     Optional<Group> findDistinctTopByUserIdAndFacebookId(UUID userId, String facebookId);
+
+    @Transactional
+    @Modifying
     void deleteByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork socialNetwork);
 
 }
