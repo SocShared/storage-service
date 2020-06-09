@@ -84,7 +84,7 @@ public class PublicationServiceImpl implements PublicationService {
         Page<Publication> result = publicationRepository.findNotPublishing(PageRequest.of(page, size));
 
         Map<String, Object> additionData = new HashMap<>();
-        sentrySender.sentryMessage("get publications not publishing", additionData, Collections.singletonList(SentryTag.GET_NOT_PUBLISHING_PUBLICATION));
+        sentrySender.sentryMessage("get publications not publishing", additionData, Collections.singletonList(SentryTag.GET_NOT_PUBLISHING_PUBLICATIONS));
 
         return result;
     }
@@ -99,7 +99,7 @@ public class PublicationServiceImpl implements PublicationService {
         Map<String, Object> additionData = new HashMap<>();
         sentrySender.sentryMessage("get publications after " + d.getDay() + "." + d.getMonth() + "." + d.getYear() + " "
                 + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds(),
-                additionData, Collections.singletonList(SentryTag.GET_PUBLISHING_AFTER_PUBLICATION));
+                additionData, Collections.singletonList(SentryTag.GET_PUBLISHING_AFTER_PUBLICATIONS));
 
         return result;
     }
@@ -112,7 +112,7 @@ public class PublicationServiceImpl implements PublicationService {
         Page<Publication> result = publicationRepository.findByGroupId(systemGroupId, pageable);
 
         Map<String, Object> additionData = new HashMap<>();
-        sentrySender.sentryMessage("get publications by group id " + systemGroupId, additionData, Collections.singletonList(SentryTag.GET_PUBLISHING_AFTER_PUBLICATION));
+        sentrySender.sentryMessage("get publications by group id " + systemGroupId, additionData, Collections.singletonList(SentryTag.GET_PUBLICATIONS_BY_GROUP_ID));
 
         return result;
     }

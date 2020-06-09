@@ -118,7 +118,7 @@ public class GroupServiceImpl implements GroupService {
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
         sentrySender.sentryMessage("get groups by user id " + userId, additionalData,
-                Collections.singletonList(SentryTag.GET_GROUP_BY_USER_ID));
+                Collections.singletonList(SentryTag.GET_GROUPS_BY_USER_ID));
 
         return result;
     }
@@ -133,7 +133,7 @@ public class GroupServiceImpl implements GroupService {
         additionalData.put("system_user_id", userId);
         additionalData.put("social_network", socialNetwork);
         sentrySender.sentryMessage("get groups by user id " + userId + " and social network " + socialNetwork,
-                additionalData, Collections.singletonList(SentryTag.GET_GROUP_BY_USER_ID_AND_SOCIAL_NETWORK));
+                additionalData, Collections.singletonList(SentryTag.GET_GROUPS_BY_USER_ID_AND_SOCIAL_NETWORK));
 
         return result;
     }
