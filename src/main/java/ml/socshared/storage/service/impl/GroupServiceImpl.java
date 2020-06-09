@@ -108,12 +108,12 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteVkGroupsByUserId(UUID userId) {
         log.info("removing groups vk by user id -> {}", userId);
-        groupRepository.deleteVkGroupsByUserId(userId);
+        groupRepository.deleteByUserIdAndSocialNetwork(userId, Group.SocialNetwork.VK);
     }
 
     @Override
     public void deleteFacebookGroupsByUserId(UUID userId) {
         log.info("removing groups facebook by user id -> {}", userId);
-        groupRepository.deleteFacebookGroupsByUserId(userId);
+        groupRepository.deleteByUserIdAndSocialNetwork(userId, Group.SocialNetwork.FACEBOOK);
     }
 }
