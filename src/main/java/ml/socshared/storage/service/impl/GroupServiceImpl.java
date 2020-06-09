@@ -10,12 +10,13 @@ import ml.socshared.storage.exception.impl.GroupIsAlreadyConnectedException;
 import ml.socshared.storage.exception.impl.HttpNotFoundException;
 import ml.socshared.storage.repository.GroupRepository;
 import ml.socshared.storage.service.GroupService;
+import ml.socshared.storage.service.sentry.SentrySender;
+import ml.socshared.storage.service.sentry.SentryTag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
+    private final SentrySender sentrySender;
 
     @Override
     public GroupResponse save(GroupRequest request) {
@@ -51,69 +53,142 @@ public class GroupServiceImpl implements GroupService {
                 break;
         }
 
-        return new GroupResponse(groupRepository.save(group));
+        GroupResponse response = new GroupResponse(groupRepository.save(group));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("group", response);
+        sentrySender.sentryMessage("save group", additionalData, Collections.singletonList(SentryTag.SAVE_GROUP));
+
+        return response;
     }
 
     @Override
     public void deleteById(UUID groupId) {
         log.info("removing by group id -> {}", groupId);
         groupRepository.deleteById(groupId);
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("group_id", groupId);
+        sentrySender.sentryMessage("delete group by group id " + groupId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_ID));
     }
 
     @Override
     public void deleteByVkId(UUID userId, String vkId) {
         log.info("removing by vk id -> {}", vkId);
         groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId).ifPresent(groupRepository::delete);
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        additionalData.put("vk_group_id", vkId);
+        sentrySender.sentryMessage("delete group by vk group id " + vkId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_VK_ID));
     }
 
     @Override
     public void deleteByFbId(UUID userId, String fbId) {
         log.info("removing by fb id -> {}", fbId);
         groupRepository.findDistinctTopByUserIdAndFacebookId(userId, fbId).ifPresent(groupRepository::delete);
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        additionalData.put("fb_group_id", fbId);
+        sentrySender.sentryMessage("delete group by fb group id " + fbId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_FB_ID));
     }
 
     @Override
     public GroupResponse findById(UUID groupId) {
         log.info("found by id -> {}", groupId);
-        return new GroupResponse(groupRepository.findById(groupId)
+
+        GroupResponse groupResponse = new GroupResponse(groupRepository.findById(groupId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by id")));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("group_id", groupId);
+        sentrySender.sentryMessage("get group by group id " + groupId, additionalData,
+                Collections.singletonList(SentryTag.GET_GROUP_BY_ID));
+
+        return groupResponse;
     }
 
     @Override
     public Page<GroupModel> findByUserId(UUID userId, Integer page, Integer size) {
         log.info("found by user id -> {}", userId);
-        return groupRepository.findByUserId(userId, PageRequest.of(page, size));
+
+        Page<GroupModel> result = groupRepository.findByUserId(userId, PageRequest.of(page, size));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        sentrySender.sentryMessage("get groups by user id " + userId, additionalData,
+                Collections.singletonList(SentryTag.GET_GROUP_BY_USER_ID));
+
+        return result;
     }
 
     @Override
     public Page<GroupModel> findByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork socialNetwork, Integer page, Integer size) {
         log.info("found by user id and social network -> {}, {}", userId, socialNetwork);
-        return groupRepository.findByUserIdAndSocialNetwork(userId, socialNetwork, PageRequest.of(page, size));
+
+        Page<GroupModel> result = groupRepository.findByUserIdAndSocialNetwork(userId, socialNetwork, PageRequest.of(page, size));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        additionalData.put("social_network", socialNetwork);
+        sentrySender.sentryMessage("get groups by user id " + userId + " and social network " + socialNetwork,
+                additionalData, Collections.singletonList(SentryTag.GET_GROUP_BY_USER_ID_AND_SOCIAL_NETWORK));
+
+        return result;
     }
 
     @Override
     public GroupResponse findByUserIdAndVkId(UUID userId, String vkId) {
         log.info("found by user id and vk id -> {}, {}", userId, vkId);
-        return new GroupResponse(groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId)
+
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and vk id")));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        additionalData.put("vk_id", vkId);
+        sentrySender.sentryMessage("get groups by user id " + userId + " and vk id " +vkId,
+                additionalData, Collections.singletonList(SentryTag.GET_BY_USER_ID_AND_VK_ID));
+
+        return response;
     }
 
     @Override
     public GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId) {
         log.info("found by user id and facebook id -> {}, {}", userId, facebookId);
-        return new GroupResponse(groupRepository.findDistinctTopByUserIdAndFacebookId(userId, facebookId)
+
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndFacebookId(userId, facebookId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook id")));
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        additionalData.put("facebook_id", facebookId);
+        sentrySender.sentryMessage("get groups by user id " + userId + " and facebook id " + facebookId,
+                additionalData, Collections.singletonList(SentryTag.GET_BY_USER_ID_AND_FACEBOOK_ID));
+
+        return response;
     }
 
     @Override
     public void deleteVkGroupsByUserId(UUID userId) {
         log.info("removing groups vk by user id -> {}", userId);
         groupRepository.deleteByUserIdAndSocialNetwork(userId, Group.SocialNetwork.VK);
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        sentrySender.sentryMessage("delete vk groups by user id " + userId,
+                additionalData, Collections.singletonList(SentryTag.DELETE_VK_GROUPS_BY_USER_ID));
     }
 
     @Override
     public void deleteFacebookGroupsByUserId(UUID userId) {
         log.info("removing groups facebook by user id -> {}", userId);
         groupRepository.deleteByUserIdAndSocialNetwork(userId, Group.SocialNetwork.FACEBOOK);
+
+        Map<String, Object> additionalData = new HashMap<>();
+        additionalData.put("system_user_id", userId);
+        sentrySender.sentryMessage("delete facebook groups by user id " + userId,
+                additionalData, Collections.singletonList(SentryTag.DELETE_FACEBOOK_GROUPS_BY_USER_ID));
     }
 }
