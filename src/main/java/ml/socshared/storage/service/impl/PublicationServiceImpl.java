@@ -55,14 +55,13 @@ public class PublicationServiceImpl implements PublicationService {
                 }
             }
             groupPostStatuses.remove(result);
-            if (result != null) {
-                result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
-            } else {
+            if (result == null) {
                 result = new GroupPostStatus();
-                result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
                 result.setGroupId(UUID.fromString(groupId));
                 result.setPublication(publication);
             }
+            result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
+            result.setStatusText(request.getStatusText());
             groupPostStatuses.add(result);
         }
         publication.setGroups(groupSet);

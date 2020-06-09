@@ -34,6 +34,9 @@ public class GroupPostStatus {
     @JoinColumn(name = "publication_id", referencedColumnName = "publication_id")
     private Publication publication;
 
+    @Column(name = "status_text")
+    private String statusText;
+
     public enum PostStatus {
         @JsonProperty("published")
         PUBLISHED,
