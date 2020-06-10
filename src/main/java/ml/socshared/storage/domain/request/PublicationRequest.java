@@ -6,6 +6,9 @@ import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -27,5 +30,7 @@ public class PublicationRequest {
     private Publication.PostType type;
     @NotNull
     private String text;
+    private String postFacebookId;
+    private String postVkId;
 
 }

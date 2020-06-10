@@ -18,9 +18,9 @@ public class GroupPostStatus {
 
     @Id
     @GeneratedValue
-    @Column(name = "group_post_id")
+    @Column(name = "post_id")
     @JsonIgnore
-    private UUID groupPostId;
+    private UUID postId;
 
     @Column(name = "group_id")
     private UUID groupId;
@@ -36,6 +36,22 @@ public class GroupPostStatus {
 
     @Column(name = "status_text")
     private String statusText;
+
+    @Column(name = "social_network", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Group.SocialNetwork socialNetwork;
+
+    @Column(name = "post_facebook_id")
+    private String postFacebookId;
+
+    @Column(name = "post_vk_id")
+    private String postVkId;
+
+    @Column(name = "group_facebook_id")
+    private String groupFacebookId;
+
+    @Column(name = "group_vk_id")
+    private String groupVkId;
 
     public enum PostStatus {
         @JsonProperty("published")
