@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import ml.socshared.storage.entity.key.GroupPublicationPK;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,18 +17,25 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "group_post_status")
+@IdClass(GroupPublicationPK.class)
 public class GroupPostStatus implements Serializable {
 
     @Id
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "publication_id", referencedColumnName = "publication_id")
-    private Publication publication;
+    @Column(name = "group_id")
+    private UUID groupId;
 
     @Id
-    @JsonManagedReference
+    @Column(name = "publication_id")
+    private UUID publicationId;
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+    @JoinColumn(name = "publication_id", referencedColumnName = "publication_id", insertable = false, updatable = false)
+    private Publication publication;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "group_id", referencedColumnName = "group_id", insertable = false, updatable = false)
     private Group group;
 
     @Enumerated(EnumType.STRING)

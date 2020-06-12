@@ -38,7 +38,7 @@ public class Group extends BaseEntity {
     @Column(name = "group_vk_id")
     private String groupVkId;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<GroupPostStatus> postStatus;
 

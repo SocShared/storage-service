@@ -49,9 +49,9 @@ public class PublicationServiceImpl implements PublicationService {
             Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
             GroupPostStatus result = new GroupPostStatus();
             result.setStatusText(request.getStatusText());
-            result.setGroup(group);
+            result.setGroupId(group.getGroupId());
             result.setPostStatus(request.getPostStatus());
-            result.setPublication(publication);
+            result.setPublicationId(publication.getPublicationId());
             result.setPostVkId(request.getPostVkId());
             result.setPostFacebookId(request.getPostFacebookId());
             result.setSocialNetwork(group.getSocialNetwork());
