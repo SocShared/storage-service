@@ -2,6 +2,7 @@ package ml.socshared.storage.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,15 +32,15 @@ public class Group extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SocialNetwork socialNetwork;
 
-    @Column(name = "facebook_id")
-    private String facebookId;
+    @Column(name = "group_facebook_id")
+    private String groupFacebookId;
 
-    @Column(name = "vk_id")
-    private String vkId;
+    @Column(name = "group_vk_id")
+    private String groupVkId;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Publication> publications;
+    @JsonBackReference
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private Set<GroupPostStatus> postStatus;
 
     public enum SocialNetwork {
         @JsonProperty("VK")

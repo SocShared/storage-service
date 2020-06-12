@@ -31,19 +31,22 @@ public class Publication extends BaseEntity {
     @Column(name = "text", length = 15000, nullable = false)
     private String text;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "publications_groups",
-            joinColumns = @JoinColumn(name = "publication_id", referencedColumnName = "publication_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id"))
-    private Set<Group> groups;
-
     @Column(name = "publication_date_time")
     private Date publicationDateTime;
 
     @Column(name = "post_type")
     @Enumerated(EnumType.STRING)
     private PostType postType;
+
+    @Column(name = "social_network", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Group.SocialNetwork socialNetwork;
+
+    @Column(name = "post_facebook_id")
+    private String postFacebookId;
+
+    @Column(name = "post_vk_id")
+    private String postVkId;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)

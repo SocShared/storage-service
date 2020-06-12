@@ -42,36 +42,18 @@ public class PublicationServiceImpl implements PublicationService {
         publication.setPostType(request.getType());
         publication.setText(request.getText());
 
-        Set<Group> groupSet = publication.getGroups() != null ? publication.getGroups() : new HashSet<>();
-
         Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus() != null ? publication.getPostStatus() : new HashSet<>();
+
         String[] groupIds = request.getGroupIds();
         for (String groupId : groupIds) {
             Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
-            groupSet.add(group);
-            GroupPostStatus result = null;
-            for (GroupPostStatus status : groupPostStatuses) {
-                if (status.getGroupId().equals(UUID.fromString(groupId))) {
-                    result = status;
-                    break;
-                }
-            }
-            groupPostStatuses.remove(result);
-            if (result == null) {
-                result = new GroupPostStatus();
-                result.setGroupId(UUID.fromString(groupId));
-                result.setGroupFacebookId(group.getFacebookId());
-                result.setGroupVkId(group.getVkId());
-                result.setSocialNetwork(group.getSocialNetwork());
-                result.setPostFacebookId(request.getPostFacebookId());
-                result.setPostVkId(request.getPostVkId());
-                result.setPublication(publication);
-            }
-            result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
+            GroupPostStatus result = new GroupPostStatus();
             result.setStatusText(request.getStatusText());
+            result.setGroup(group);
+            result.setPostStatus(request.getPostStatus());
+            result.setPublication(publication);
             groupPostStatuses.add(result);
         }
-        publication.setGroups(groupSet);
         publication.setPostStatus(groupPostStatuses);
 
         PublicationResponse response = new PublicationResponse(publicationRepository.save(publication));

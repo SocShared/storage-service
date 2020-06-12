@@ -46,10 +46,10 @@ public class GroupServiceImpl implements GroupService {
 
         switch (request.getSocialNetwork()) {
             case FACEBOOK:
-                group.setFacebookId(request.getFbId());
+                group.setGroupFacebookId(request.getFbId());
                 break;
             case VK:
-                group.setVkId(request.getVkId());
+                group.setGroupVkId(request.getVkId());
                 break;
         }
 
