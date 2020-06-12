@@ -25,6 +25,7 @@ public class GroupPostStatus implements Serializable {
     private UUID groupId;
 
     @Id
+    @JsonIgnore
     @Column(name = "publication_id")
     private UUID publicationId;
 
