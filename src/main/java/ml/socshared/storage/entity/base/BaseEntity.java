@@ -7,13 +7,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

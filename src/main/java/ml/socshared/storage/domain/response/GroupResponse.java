@@ -27,8 +27,8 @@ public class GroupResponse {
         this.groupId = group.getGroupId().toString();
         this.socialNetwork = group.getSocialNetwork();
         this.name = group.getName();
-        this.vkId = group.getVkId();
-        this.facebookId = group.getFacebookId();
+        this.vkId = group.getGroupVkId();
+        this.facebookId = group.getGroupFacebookId();
         this.userId = group.getUserId().toString();
     }
 

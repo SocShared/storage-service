@@ -9,13 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "group_post_status")
-public class GroupPostStatus {
+public class GroupPostStatus implements Serializable {
 
     @Id
     @JsonBackReference
@@ -35,6 +36,16 @@ public class GroupPostStatus {
 
     @Column(name = "status_text")
     private String statusText;
+
+    @Column(name = "social_network", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Group.SocialNetwork socialNetwork;
+
+    @Column(name = "post_facebook_id")
+    private String postFacebookId;
+
+    @Column(name = "post_vk_id")
+    private String postVkId;
 
     public enum PostStatus {
         @JsonProperty("published")

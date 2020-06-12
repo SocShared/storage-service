@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 public interface PublicationRepository extends JpaRepository<Publication, UUID> {
 
-    @Query("select p from Publication p join Group g where p.userId = :userId and g.userId = :userId and g.groupId = :groupId")
+    @Query("select distinct p from Publication p, GroupPostStatus gps where p.userId = :userId and gps.group.userId = :userId and gps.group.groupId = :groupId")
     Page<Publication> findByUserIdAndGroupId(@Param("userId") UUID userId, @Param("groupId") UUID groupId, Pageable pageable);
 
     @Query("select distinct p from Publication p, GroupPostStatus gps " +
@@ -31,7 +31,7 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
             "where gps.publication = p and gps.postStatus = 'PUBLISHED' and p.publicationDateTime >= :date")
     Page<Publication> findByPublishingAfter(@Param("date") Date date, Pageable pageable);
 
-    @Query("select distinct p from Publication p, GroupPostStatus gps where gps.publication = p and gps.groupId = :groupId")
+    @Query("select distinct p from Publication p, GroupPostStatus gps where gps.publication = p and gps.group.groupId = :groupId")
     Page<Publication> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
 
 }

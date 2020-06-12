@@ -12,7 +12,7 @@ public interface GroupModel {
     UUID getUserId();
     String getName();
     Group.SocialNetwork getSocialNetwork();
-    String getFacebookId();
-    String getVkId();
+    String getGroupFacebookId();
+    String getGroupVkId();
 
 }

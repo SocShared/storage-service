@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "groups", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "facebook_id", "vk_id"})})
+@Table(name = "groups", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "group_facebook_id", "group_vk_id"})})
 public class Group extends BaseEntity {
     @Id
     @GeneratedValue

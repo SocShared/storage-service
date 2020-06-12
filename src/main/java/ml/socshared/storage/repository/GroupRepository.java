@@ -19,8 +19,8 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
 
     Page<GroupModel> findByUserId(UUID userId, Pageable pageable);
     Page<GroupModel> findByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork social, Pageable pageable);
-    Optional<Group> findDistinctTopByUserIdAndVkId(UUID userId, String vkId);
-    Optional<Group> findDistinctTopByUserIdAndFacebookId(UUID userId, String facebookId);
+    Optional<Group> findDistinctTopByUserIdAndGroupVkId(UUID userId, String vkId);
+    Optional<Group> findDistinctTopByUserIdAndGroupFacebookId(UUID userId, String facebookId);
 
     @Transactional
     @Modifying

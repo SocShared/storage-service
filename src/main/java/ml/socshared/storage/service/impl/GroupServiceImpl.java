@@ -30,8 +30,8 @@ public class GroupServiceImpl implements GroupService {
     public GroupResponse save(GroupRequest request) {
         log.info("saving -> {}", request);
 
-        boolean groupVkIsConnect = groupRepository.findDistinctTopByUserIdAndVkId(UUID.fromString(request.getUserId()), request.getVkId()).orElse(null) != null;
-        boolean groupFbIsConnect = groupRepository.findDistinctTopByUserIdAndFacebookId(UUID.fromString(request.getUserId()), request.getFbId()).orElse(null) != null;
+        boolean groupVkIsConnect = groupRepository.findDistinctTopByUserIdAndGroupVkId(UUID.fromString(request.getUserId()), request.getVkId()).orElse(null) != null;
+        boolean groupFbIsConnect = groupRepository.findDistinctTopByUserIdAndGroupFacebookId(UUID.fromString(request.getUserId()), request.getFbId()).orElse(null) != null;
 
         if (groupFbIsConnect && request.getSocialNetwork() == Group.SocialNetwork.FACEBOOK)
             throw new GroupIsAlreadyConnectedException(String.format("Group FB (%s) is already connected.", request.getFbId()));
@@ -75,7 +75,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteByVkId(UUID userId, String vkId) {
         log.info("removing by vk id -> {}", vkId);
-        groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId).ifPresent(groupRepository::delete);
+        groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, vkId).ifPresent(groupRepository::delete);
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
@@ -86,7 +86,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void deleteByFbId(UUID userId, String fbId) {
         log.info("removing by fb id -> {}", fbId);
-        groupRepository.findDistinctTopByUserIdAndFacebookId(userId, fbId).ifPresent(groupRepository::delete);
+        groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, fbId).ifPresent(groupRepository::delete);
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
@@ -142,7 +142,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupResponse findByUserIdAndVkId(UUID userId, String vkId) {
         log.info("found by user id and vk id -> {}, {}", userId, vkId);
 
-        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndVkId(userId, vkId)
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, vkId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and vk id")));
 
         Map<String, Object> additionalData = new HashMap<>();
@@ -158,7 +158,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId) {
         log.info("found by user id and facebook id -> {}, {}", userId, facebookId);
 
-        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndFacebookId(userId, facebookId)
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, facebookId)
                 .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook id")));
 
         Map<String, Object> additionalData = new HashMap<>();
