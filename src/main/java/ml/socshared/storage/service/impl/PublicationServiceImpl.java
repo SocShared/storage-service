@@ -56,6 +56,7 @@ public class PublicationServiceImpl implements PublicationService {
             result.setPostVkId(request.getPostVkId());
             result.setPostFacebookId(request.getPostFacebookId());
             result.setSocialNetwork(group.getSocialNetwork());
+            groupPostStatuses.add(result);
         }
         publicationSave.setPostStatus(groupPostStatuses);
         Publication result = publicationRepository.save(publicationSave);
