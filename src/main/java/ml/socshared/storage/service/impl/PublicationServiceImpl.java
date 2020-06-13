@@ -45,21 +45,22 @@ public class PublicationServiceImpl implements PublicationService {
         Set<GroupPostStatus> groupPostStatuses = publication.getPostStatus() != null ? publication.getPostStatus() : new HashSet<>();
 
         String[] groupIds = request.getGroupIds();
+        Publication publicationSave = publicationRepository.save(publication);
         for (String groupId : groupIds) {
             Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
             GroupPostStatus result = new GroupPostStatus();
             result.setStatusText(request.getStatusText());
             result.setGroupId(group.getGroupId());
-            result.setPostStatus(request.getPostStatus());
-            result.setPublicationId(publication.getPublicationId());
+            result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.AWAITING);
+            result.setPublicationId(publicationSave.getPublicationId());
             result.setPostVkId(request.getPostVkId());
             result.setPostFacebookId(request.getPostFacebookId());
             result.setSocialNetwork(group.getSocialNetwork());
-            groupPostStatuses.add(result);
         }
-        publication.setPostStatus(groupPostStatuses);
+        publicationSave.setPostStatus(groupPostStatuses);
+        Publication result = publicationRepository.save(publicationSave);
 
-        PublicationResponse response = new PublicationResponse(publicationRepository.save(publication));
+        PublicationResponse response = new PublicationResponse(result);
 
         Map<String, Object> additionData = new HashMap<>();
         additionData.put("publication", response);
