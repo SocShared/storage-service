@@ -2,6 +2,7 @@ package ml.socshared.storage.domain.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
@@ -16,6 +17,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 public class PublicationRequest {
 
     private String publicationId;
