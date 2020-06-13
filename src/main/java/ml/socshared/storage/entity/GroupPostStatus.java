@@ -29,7 +29,7 @@ public class GroupPostStatus implements Serializable {
     @Column(name = "publication_id")
     private UUID publicationId;
 
-    @JsonIgnore
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "publication_id", referencedColumnName = "publication_id", insertable = false, updatable = false)
     private Publication publication;

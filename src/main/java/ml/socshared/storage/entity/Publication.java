@@ -38,7 +38,7 @@ public class Publication extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PostType postType;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL)
     private Set<GroupPostStatus> postStatus;
 
