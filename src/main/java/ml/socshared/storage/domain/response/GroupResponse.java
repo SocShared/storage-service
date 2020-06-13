@@ -12,11 +12,11 @@ import ml.socshared.storage.entity.Group;
 public class GroupResponse {
 
     private String groupId;
-    private Group.SocialNetwork socialNetwork;
     private String name;
     private String groupVkId;
     private String groupFacebookId;
     private String userId;
+    private Group.SocialNetwork socialNetwork;
 
     public GroupResponse() {}
 
