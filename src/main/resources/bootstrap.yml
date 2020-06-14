@@ -9,5 +9,8 @@ spring:
   profiles:
     active: ${SPRING_PROFILE:local}
 
+service:
+  id: 64141ce5-5604-4ade-ada2-e38cf7d2522c
+
 jwt:
   secret: ${SECRET_JWT_KEY:mWDDrMHQ+QJcTnE+afpVz76HrKkGoKQZHnubc52bYN3/bECi32YNjVbR6EDs6BQsveUIh44ubwcktdPc7Sm9Tg==}

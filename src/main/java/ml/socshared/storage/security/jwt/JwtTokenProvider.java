@@ -21,6 +21,8 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String secretKey;
+    @Value("${service.id}")
+    private String serviceId;
 
     private final AuthClient authClient;
 
@@ -30,7 +32,7 @@ public class JwtTokenProvider {
 
         return ServiceDetails.builder()
                 .authorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role)))
-                .username(claims.get("to_service", String.class))
+                .username(claims.get("from_service", String.class))
                 .accountNonLocked(true)
                 .build();
     }
@@ -38,7 +40,7 @@ public class JwtTokenProvider {
     public boolean validateServiceToken(String token) {
         try {
             Jws<Claims> claims = getJwsClaimsFromToken(token);
-
+            String toServiceId = claims.getBody().get("to_service", String.class);
             Date date = claims.getBody().getExpiration();
             if (date.before(new Date())) {
                 log.warn("JWT Token is expired.");
@@ -48,7 +50,7 @@ public class JwtTokenProvider {
             CheckTokenRequest request = new CheckTokenRequest();
             request.setToken(token);
 
-            return authClient.send(request).getSuccess();
+            return serviceId.equals(toServiceId) && authClient.send(request).getSuccess();
         } catch (JwtException | IllegalArgumentException exc) {
             if (exc instanceof ExpiredJwtException) {
                 log.warn("JWT Token is expired.");
