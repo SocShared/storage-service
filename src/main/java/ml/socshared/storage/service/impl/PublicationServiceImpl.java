@@ -8,6 +8,7 @@ import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
 import ml.socshared.storage.exception.impl.HttpNotFoundException;
+import ml.socshared.storage.repository.GroupPostStatusRepository;
 import ml.socshared.storage.repository.GroupRepository;
 import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
@@ -26,6 +27,7 @@ import java.util.*;
 public class PublicationServiceImpl implements PublicationService {
 
     private final GroupRepository groupRepository;
+    private final GroupPostStatusRepository groupPostStatusRepository;
     private final PublicationRepository publicationRepository;
     private final SentrySender sentrySender;
 
@@ -56,12 +58,12 @@ public class PublicationServiceImpl implements PublicationService {
             result.setPostVkId(request.getPostVkId());
             result.setPostFacebookId(request.getPostFacebookId());
             result.setSocialNetwork(group.getSocialNetwork());
+            result = groupPostStatusRepository.save(result);
             groupPostStatuses.add(result);
         }
         publicationSave.setPostStatus(groupPostStatuses);
-        Publication result = publicationRepository.save(publicationSave);
 
-        PublicationResponse response = new PublicationResponse(result);
+        PublicationResponse response = new PublicationResponse(publicationSave);
 
         Map<String, Object> additionData = new HashMap<>();
         additionData.put("publication", response);
