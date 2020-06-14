@@ -56,6 +56,12 @@ public class GroupPostStatus implements Serializable {
     @Column(name = "post_vk_id")
     private String postVkId;
 
+    @Column(name = "group_facebook_id")
+    private String groupFacebookId;
+
+    @Column(name = "group_vk_id")
+    private String groupVkId;
+
     public enum PostStatus {
         @JsonProperty("published")
         PUBLISHED,
