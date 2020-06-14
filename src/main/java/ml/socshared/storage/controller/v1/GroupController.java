@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @Validated
 @PreAuthorize("isAuthenticated()")
@@ -29,13 +29,13 @@ public class GroupController implements GroupApi {
     private final GroupService service;
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/groups/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/groups/{groupId}")
     public GroupResponse findById(@PathVariable UUID groupId) {
         return service.findById(groupId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/users/{userId}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/users/{userId}/groups")
     public Page<GroupModel> findByUserId(@PathVariable UUID userId,
                                          @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
                                          @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
@@ -43,7 +43,7 @@ public class GroupController implements GroupApi {
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/users/{userId}/groups/social_network/{socialNetwork}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/users/{userId}/groups/social_network/{socialNetwork}/groups")
     public Page<GroupModel> findByUserIdAndSocialNetwork(@PathVariable UUID userId, @PathVariable Group.SocialNetwork socialNetwork,
                                                          @Min(0) @NotNull @RequestParam(name = "page", required = false) Integer page,
                                                          @Min(0) @Max(100) @NotNull @RequestParam(name = "size", required = false) Integer size) {
@@ -51,50 +51,49 @@ public class GroupController implements GroupApi {
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/users/{userId}/groups/facebook/{facebookId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/users/{userId}/groups/facebook/{facebookId}")
     public GroupResponse findByUserIdAndFacebookId(@PathVariable UUID userId, @PathVariable String facebookId) {
         return service.findByUserIdAndFacebookId(userId, facebookId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/users/{userId}/groups/vk/{vkId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/users/{userId}/groups/vk/{vkId}")
     public GroupResponse findByUserIdAndVkId(@PathVariable UUID userId, @PathVariable String vkId) {
         return service.findByUserIdAndVkId(userId, vkId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @PostMapping(value = "/private/groups", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/private/groups")
     public GroupResponse save(@RequestBody @Valid GroupRequest request) {
         return service.save(request);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @DeleteMapping(value = "/private/groups/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/private/groups/{groupId}")
     public void deleteById(@PathVariable UUID groupId) {
         service.deleteById(groupId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @DeleteMapping(value = "/private/users/{userId}/groups/facebook/{fbId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/private/users/{userId}/groups/facebook/{fbId}")
     public void deleteByFBId(@PathVariable UUID userId, @PathVariable String fbId) {
         service.deleteByFbId(userId, fbId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @DeleteMapping(value = "/private/users/{userId}/groups/vk/{vkId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/private/users/{userId}/groups/vk/{vkId}")
     public void deleteByVkId(@PathVariable UUID userId, @PathVariable String vkId) {
         service.deleteByVkId(userId, vkId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @DeleteMapping(value = "/private/users/{userId}/groups/vk", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/private/users/{userId}/groups/vk")
     public void deleteVkGroupsByUserId(@PathVariable UUID userId) {
         service.deleteVkGroupsByUserId(userId);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @DeleteMapping(value = "/private/users/{userId}/groups/facebook",
-            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/private/users/{userId}/groups/facebook")
     public void deleteFacebookGroupsByUserId(@PathVariable UUID userId) {
         service.deleteFacebookGroupsByUserId(userId);
     }

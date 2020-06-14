@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/v1")
+@RequestMapping(value = "/api/v1", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @Validated
 @PreAuthorize("isAuthenticated()")
@@ -28,14 +28,13 @@ public class PublicationController {
     private final PublicationService publicationService;
 
     @PreAuthorize("hasRole('SERVICE')")
-    @PostMapping(value = "/private/publications", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/private/publications")
     public PublicationResponse save(@RequestBody PublicationRequest request) {
         return publicationService.save(request);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/publications/status/published", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/publications/status/published")
     public Page<Publication> findAfter(@NotNull @RequestParam(name = "after", required = false) Long after,
                                             @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                             @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
@@ -43,14 +42,14 @@ public class PublicationController {
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/publications/status/not_publishing", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/publications/status/not_publishing")
     public Page<Publication> findNotPublishing(@Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
         return publicationService.findNotPublishing(page, size);
     }
 
     @PreAuthorize("hasRole('SERVICE')")
-    @GetMapping(value = "/private/groups/{systemGroupId}/publications", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/private/groups/{systemGroupId}/publications")
     public Page<Publication> findByGroupId(@PathVariable UUID systemGroupId,
                                                 @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                 @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
