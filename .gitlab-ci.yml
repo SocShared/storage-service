@@ -17,6 +17,7 @@ build:
   artifacts:
     paths:
       - build/libs/socshared-storage-service-1.0.0-SNAPSHOT.jar
+    expire_in: 1 hrs
 
 docker-build:
   stage: docker-build
