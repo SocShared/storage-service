@@ -5,7 +5,7 @@ server:
       enabled: false
 spring:
   application:
-    name: socshared-storage-service
+    name: storage
   profiles:
     active: ${SPRING_PROFILE:local}
 
