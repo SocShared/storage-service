@@ -69,29 +69,29 @@ public class GroupServiceImpl implements GroupService {
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("group_id", groupId);
-        sentrySender.sentryMessage("delete group by group id " + groupId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_ID));
+        sentrySender.sentryMessage("delete group by group id", additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_ID));
     }
 
     @Override
-    public void deleteByVkId(UUID userId, String vkId) {
-        log.info("removing by vk id -> {}", vkId);
-        groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, vkId).ifPresent(groupRepository::delete);
+    public void deleteByVkId(UUID userId, String groupVkId) {
+        log.info("removing by group vk id -> {}", groupVkId);
+        groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, groupVkId).ifPresent(groupRepository::delete);
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        additionalData.put("vk_group_id", vkId);
-        sentrySender.sentryMessage("delete group by vk group id " + vkId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_VK_ID));
+        additionalData.put("vk_group_id", groupVkId);
+        sentrySender.sentryMessage("delete group by vk group id", additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_VK_ID));
     }
 
     @Override
-    public void deleteByFbId(UUID userId, String fbId) {
-        log.info("removing by fb id -> {}", fbId);
-        groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, fbId).ifPresent(groupRepository::delete);
+    public void deleteByFbId(UUID userId, String groupFbId) {
+        log.info("removing by fb id -> {}", groupFbId);
+        groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, groupFbId).ifPresent(groupRepository::delete);
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        additionalData.put("fb_group_id", fbId);
-        sentrySender.sentryMessage("delete group by fb group id " + fbId, additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_FB_ID));
+        additionalData.put("fb_group_id", groupFbId);
+        sentrySender.sentryMessage("delete group by fb group id", additionalData, Collections.singletonList(SentryTag.DELETE_GROUP_BY_FB_ID));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class GroupServiceImpl implements GroupService {
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("group_id", groupId);
-        sentrySender.sentryMessage("get group by group id " + groupId, additionalData,
+        sentrySender.sentryMessage("get group by group id", additionalData,
                 Collections.singletonList(SentryTag.GET_GROUP_BY_ID));
 
         return groupResponse;
@@ -117,7 +117,7 @@ public class GroupServiceImpl implements GroupService {
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        sentrySender.sentryMessage("get groups by user id " + userId, additionalData,
+        sentrySender.sentryMessage("get groups by user id", additionalData,
                 Collections.singletonList(SentryTag.GET_GROUPS_BY_USER_ID));
 
         return result;
@@ -132,39 +132,39 @@ public class GroupServiceImpl implements GroupService {
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
         additionalData.put("social_network", socialNetwork);
-        sentrySender.sentryMessage("get groups by user id " + userId + " and social network " + socialNetwork,
+        sentrySender.sentryMessage("get groups by user id and social network",
                 additionalData, Collections.singletonList(SentryTag.GET_GROUPS_BY_USER_ID_AND_SOCIAL_NETWORK));
 
         return result;
     }
 
     @Override
-    public GroupResponse findByUserIdAndVkId(UUID userId, String vkId) {
-        log.info("found by user id and vk id -> {}, {}", userId, vkId);
+    public GroupResponse findByUserIdAndVkId(UUID userId, String groupVkId) {
+        log.info("found by user id and vk group id -> {}, {}", userId, groupVkId);
 
-        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, vkId)
-                .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and vk id")));
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupVkId(userId, groupVkId)
+                .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and vk group id")));
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        additionalData.put("vk_id", vkId);
-        sentrySender.sentryMessage("get groups by user id " + userId + " and vk id " +vkId,
+        additionalData.put("vk_group_id", groupVkId);
+        sentrySender.sentryMessage("get groups by user id and vk group id",
                 additionalData, Collections.singletonList(SentryTag.GET_BY_USER_ID_AND_VK_ID));
 
         return response;
     }
 
     @Override
-    public GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId) {
-        log.info("found by user id and facebook id -> {}, {}", userId, facebookId);
+    public GroupResponse findByUserIdAndFacebookId(UUID userId, String groupFacebookId) {
+        log.info("found by user id and facebook id -> {}, {}", userId, groupFacebookId);
 
-        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, facebookId)
-                .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook id")));
+        GroupResponse response = new GroupResponse(groupRepository.findDistinctTopByUserIdAndGroupFacebookId(userId, groupFacebookId)
+                .orElseThrow(() -> new HttpNotFoundException("Not found group by user id and facebook group id")));
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        additionalData.put("facebook_id", facebookId);
-        sentrySender.sentryMessage("get groups by user id " + userId + " and facebook id " + facebookId,
+        additionalData.put("facebook_group_id", groupFacebookId);
+        sentrySender.sentryMessage("get groups by user id and facebook group id",
                 additionalData, Collections.singletonList(SentryTag.GET_BY_USER_ID_AND_FACEBOOK_ID));
 
         return response;
@@ -177,7 +177,7 @@ public class GroupServiceImpl implements GroupService {
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        sentrySender.sentryMessage("delete vk groups by user id " + userId,
+        sentrySender.sentryMessage("delete vk groups by user id",
                 additionalData, Collections.singletonList(SentryTag.DELETE_VK_GROUPS_BY_USER_ID));
     }
 
@@ -188,7 +188,7 @@ public class GroupServiceImpl implements GroupService {
 
         Map<String, Object> additionalData = new HashMap<>();
         additionalData.put("system_user_id", userId);
-        sentrySender.sentryMessage("delete facebook groups by user id " + userId,
+        sentrySender.sentryMessage("delete facebook groups by user id",
                 additionalData, Collections.singletonList(SentryTag.DELETE_FACEBOOK_GROUPS_BY_USER_ID));
     }
 }

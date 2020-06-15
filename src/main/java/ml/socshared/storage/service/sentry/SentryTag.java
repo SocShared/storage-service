@@ -31,6 +31,5 @@ public enum SentryTag {
 
     private final String sentryTag;
     private final String type;
-    public static final String SERVICE_NAME = "STS";
 
 }
