@@ -2,6 +2,7 @@ package ml.socshared.storage.service;
 
 import ml.socshared.storage.domain.model.GroupModel;
 import ml.socshared.storage.domain.request.GroupRequest;
+import ml.socshared.storage.domain.response.GroupCountResponse;
 import ml.socshared.storage.domain.response.GroupResponse;
 import ml.socshared.storage.entity.Group;
 import org.springframework.data.domain.Page;
@@ -21,5 +22,6 @@ public interface GroupService {
     GroupResponse findByUserIdAndFacebookId(UUID userId, String facebookId);
     void deleteVkGroupsByUserId(UUID userId);
     void deleteFacebookGroupsByUserId(UUID userId);
+    GroupCountResponse groupCount();
 
 }

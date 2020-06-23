@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ml.socshared.storage.domain.model.GroupModel;
 import ml.socshared.storage.domain.request.GroupRequest;
+import ml.socshared.storage.domain.response.GroupCountResponse;
 import ml.socshared.storage.domain.response.GroupResponse;
 import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.exception.impl.GroupIsAlreadyConnectedException;
@@ -190,5 +191,13 @@ public class GroupServiceImpl implements GroupService {
         additionalData.put("system_user_id", userId);
         sentrySender.sentryMessage("delete facebook groups by user id",
                 additionalData, Collections.singletonList(SentryTag.DELETE_FACEBOOK_GROUPS_BY_USER_ID));
+    }
+
+    @Override
+    public GroupCountResponse groupCount() {
+        return GroupCountResponse.builder()
+                .facebookGroupCount(groupRepository.countBySocialNetwork(Group.SocialNetwork.FACEBOOK))
+                .vkGroupCount(groupRepository.countBySocialNetwork(Group.SocialNetwork.VK))
+                .build();
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ml.socshared.storage.api.v1.rest.GroupApi;
 import ml.socshared.storage.domain.model.GroupModel;
 import ml.socshared.storage.domain.request.GroupRequest;
+import ml.socshared.storage.domain.response.GroupCountResponse;
 import ml.socshared.storage.domain.response.GroupResponse;
 import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.service.GroupService;
@@ -96,5 +97,11 @@ public class GroupController implements GroupApi {
     @DeleteMapping(value = "/private/users/{userId}/groups/facebook")
     public void deleteFacebookGroupsByUserId(@PathVariable UUID userId) {
         service.deleteFacebookGroupsByUserId(userId);
+    }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @GetMapping(value = "/private/groups/count")
+    public GroupCountResponse groupCount() {
+        return service.groupCount();
     }
 }

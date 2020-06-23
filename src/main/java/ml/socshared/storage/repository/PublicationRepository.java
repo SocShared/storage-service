@@ -3,6 +3,7 @@ package ml.socshared.storage.repository;
 import ml.socshared.storage.domain.model.PublicationModel;
 import ml.socshared.storage.domain.response.PublicationResponse;
 import ml.socshared.storage.entity.Group;
+import ml.socshared.storage.entity.GroupPostStatus;
 import ml.socshared.storage.entity.Publication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
 import java.util.Set;
@@ -33,5 +35,15 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
 
     @Query("select distinct p from Publication p, GroupPostStatus gps where gps.publication = p and gps.group.groupId = :groupId")
     Page<Publication> findByGroupId(@Param("groupId") UUID groupId, Pageable pageable);
+
+    @Query("select distinct count(p) " +
+            " from Publication p, GroupPostStatus gps " +
+            "where gps.publication = p and gps.postStatus = :postStatus")
+    long countByPostStatus(@Param("postStatus") GroupPostStatus.PostStatus postStatus);
+
+    @Query("select distinct count(p) " +
+            " from Publication p, GroupPostStatus gps " +
+            "where gps.publication = p and gps.postStatus = :postStatus and gps.socialNetwork = :socialNetwork")
+    long countByPostStatusAndSocialNetwork(@Param("postStatus") GroupPostStatus.PostStatus postStatus, @Param("socialNetwork") Group.SocialNetwork socialNetwork);
 
 }

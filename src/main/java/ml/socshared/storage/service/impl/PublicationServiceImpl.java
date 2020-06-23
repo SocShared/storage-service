@@ -3,6 +3,7 @@ package ml.socshared.storage.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ml.socshared.storage.domain.request.PublicationRequest;
+import ml.socshared.storage.domain.response.PublicationCountResponse;
 import ml.socshared.storage.domain.response.PublicationResponse;
 import ml.socshared.storage.entity.Group;
 import ml.socshared.storage.entity.GroupPostStatus;
@@ -112,5 +113,17 @@ public class PublicationServiceImpl implements PublicationService {
         sentrySender.sentryMessage("get publications by group id", additionData, Collections.singletonList(SentryTag.GET_PUBLICATIONS_BY_GROUP_ID));
 
         return result;
+    }
+
+    @Override
+    public PublicationCountResponse publicationCount() {
+        return PublicationCountResponse.builder()
+                .publishedCount(publicationRepository.countByPostStatus(GroupPostStatus.PostStatus.PUBLISHED))
+                .notSuccessfulCount(publicationRepository.countByPostStatus(GroupPostStatus.PostStatus.NOT_SUCCESSFUL))
+                .waitingOrProcessingCount(publicationRepository.countByPostStatus(GroupPostStatus.PostStatus.AWAITING) +
+                        publicationRepository.countByPostStatus(GroupPostStatus.PostStatus.PROCESSING))
+                .fbPublicationCount(publicationRepository.countByPostStatusAndSocialNetwork(GroupPostStatus.PostStatus.PUBLISHED, Group.SocialNetwork.FACEBOOK))
+                .vkPublicationCount(publicationRepository.countByPostStatusAndSocialNetwork(GroupPostStatus.PostStatus.PUBLISHED, Group.SocialNetwork.VK))
+                .build();
     }
 }

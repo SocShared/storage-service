@@ -3,6 +3,8 @@ package ml.socshared.storage.controller.v1;
 import lombok.RequiredArgsConstructor;
 import ml.socshared.storage.domain.model.PublicationModel;
 import ml.socshared.storage.domain.request.PublicationRequest;
+import ml.socshared.storage.domain.response.GroupCountResponse;
+import ml.socshared.storage.domain.response.PublicationCountResponse;
 import ml.socshared.storage.domain.response.PublicationResponse;
 import ml.socshared.storage.entity.Publication;
 import ml.socshared.storage.service.PublicationService;
@@ -54,6 +56,12 @@ public class PublicationController {
                                                 @Min(0) @NotNull @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                 @Min(0) @Max(100) @NotNull @RequestParam(name = "size", defaultValue = "100") Integer size) {
             return publicationService.findByGroupId(systemGroupId, page, size);
+    }
+
+    @PreAuthorize("hasRole('SERVICE')")
+    @GetMapping(value = "/private/publications/count")
+    public PublicationCountResponse publicationCount() {
+        return publicationService.publicationCount();
     }
 
 }

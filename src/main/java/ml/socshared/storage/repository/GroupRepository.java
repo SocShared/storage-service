@@ -26,4 +26,6 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
     @Modifying
     void deleteByUserIdAndSocialNetwork(UUID userId, Group.SocialNetwork socialNetwork);
 
+    long countBySocialNetwork(Group.SocialNetwork socialNetwork);
+
 }
