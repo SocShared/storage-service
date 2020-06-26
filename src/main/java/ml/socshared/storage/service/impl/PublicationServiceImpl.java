@@ -158,7 +158,8 @@ public class PublicationServiceImpl implements PublicationService {
             request.setText(response.getText());
             List<String> groupIds = new ArrayList<>();
             log.info("prev publication response -> {}", response);
-            for (GroupPostStatus status : response.getPostStatus()) {
+            Set<GroupPostStatus> groupPostStatuses = response.getPostStatus();
+            for (GroupPostStatus status : groupPostStatuses) {
                 groupIds.add(status.getGroupId().toString());
             }
             request.setGroupIds(groupIds.toArray(String[]::new));
