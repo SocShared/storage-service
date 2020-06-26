@@ -33,6 +33,10 @@ public interface PublicationRepository extends JpaRepository<Publication, UUID> 
             " p.publicationDateTime is not null and gps.postStatus = 'AWAITING' and p.publicationDateTime <= CURRENT_TIMESTAMP")
     Page<Publication> findNotPublishingDeferred(Pageable pageable);
 
+    @Query("select distinct p from Publication p, GroupPostStatus gps " +
+            "where gps.publication = p and p.postType = 'IN_REAL_TIME' and gps.postStatus = 'AWAITING'")
+    Page<Publication> findNotPublishingInRealTime(Pageable pageable);
+
     @Query("select distinct p " +
             " from Publication p, GroupPostStatus gps " +
             "where gps.publication = p and gps.postStatus = 'PUBLISHED' and p.publicationDateTime >= :date")

@@ -81,39 +81,6 @@ public class PublicationServiceImpl implements PublicationService {
         additionData.put("publication", response);
         sentrySender.sentryMessage("save publication", additionData, Collections.singletonList(SentryTag.SAVE_PUBLICATION));
 
-        if (response.getPostType() == Publication.PostType.IN_REAL_TIME) {
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                groupPostStatuses = new HashSet<>();
-
-                for (String groupId : groupIds) {
-                    Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
-                    GroupPostStatus result = new GroupPostStatus();
-                    result.setStatusText(request.getStatusText());
-                    result.setGroupId(group.getGroupId());
-                    result.setPostStatus(GroupPostStatus.PostStatus.PROCESSING);
-                    result.setPublicationId(publicationSave.getPublicationId());
-                    result.setPostVkId(request.getPostVkId());
-                    result.setPostFacebookId(request.getPostFacebookId());
-                    result.setSocialNetwork(group.getSocialNetwork());
-                    result.setGroupVkId(group.getGroupVkId());
-                    result.setGroupFacebookId(group.getGroupFacebookId());
-                    result = groupPostStatusRepository.save(result);
-                    groupPostStatuses.add(result);
-                }
-                publicationSave.setPostStatus(groupPostStatuses);
-
-                PublicationResponse resp = new PublicationResponse(publicationSave);
-
-                log.info("publication resp add queue -> {}", resp);
-                String serialize = objectMapper.writeValueAsString(resp);
-                rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, serialize);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-
         return response;
     }
 
@@ -169,9 +136,19 @@ public class PublicationServiceImpl implements PublicationService {
                 .build();
     }
 
-    @Scheduled(fixedDelay = 100000)
-    public void startPost() throws IOException {
-        Page<Publication> notPublishing = publicationRepository.findNotPublishingDeferred(PageRequest.of(0, 50));
+    @Scheduled(fixedDelay = 60000)
+    public void startPostDeffered() throws IOException {
+        Page<Publication> notPublishing = publicationRepository.findNotPublishingDeferred(PageRequest.of(0, 100));
+        sendPublicationToRabbit(notPublishing);
+    }
+
+    @Scheduled(fixedDelay = 30000)
+    public void startPostInRealTime() throws IOException {
+        Page<Publication> notPublishing = publicationRepository.findNotPublishingInRealTime(PageRequest.of(0, 100));
+        sendPublicationToRabbit(notPublishing);
+    }
+
+    private void sendPublicationToRabbit(Page<Publication> notPublishing) throws IOException {
         List<Publication> publicationResponseList = notPublishing.getContent();
         log.info("batch size publiction -> {}", publicationResponseList.size());
         ObjectMapper objectMapper = new ObjectMapper();
