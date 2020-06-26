@@ -39,7 +39,7 @@ public class Publication extends BaseEntity {
     private PostType postType;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<GroupPostStatus> postStatus;
 
     public enum PostType {
