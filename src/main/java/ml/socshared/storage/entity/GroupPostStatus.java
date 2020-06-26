@@ -30,12 +30,12 @@ public class GroupPostStatus implements Serializable {
     private UUID publicationId;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "publication_id", referencedColumnName = "publication_id", insertable = false, updatable = false)
     private Publication publication;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "group_id", insertable = false, updatable = false)
     private Group group;
 
