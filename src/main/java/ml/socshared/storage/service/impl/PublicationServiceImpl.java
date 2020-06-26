@@ -1,7 +1,11 @@
 package ml.socshared.storage.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ml.socshared.storage.config.RabbitMQConfig;
 import ml.socshared.storage.domain.request.PublicationRequest;
 import ml.socshared.storage.domain.response.PublicationCountResponse;
 import ml.socshared.storage.domain.response.PublicationResponse;
@@ -15,11 +19,14 @@ import ml.socshared.storage.repository.PublicationRepository;
 import ml.socshared.storage.service.PublicationService;
 import ml.socshared.storage.service.sentry.SentrySender;
 import ml.socshared.storage.service.sentry.SentryTag;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -31,6 +38,8 @@ public class PublicationServiceImpl implements PublicationService {
     private final GroupPostStatusRepository groupPostStatusRepository;
     private final PublicationRepository publicationRepository;
     private final SentrySender sentrySender;
+
+    private final RabbitTemplate rabbitTemplate;
 
     @Override
     public PublicationResponse save(PublicationRequest request) {
@@ -71,6 +80,33 @@ public class PublicationServiceImpl implements PublicationService {
         Map<String, Object> additionData = new HashMap<>();
         additionData.put("publication", response);
         sentrySender.sentryMessage("save publication", additionData, Collections.singletonList(SentryTag.SAVE_PUBLICATION));
+
+        if (response.getPostType() == Publication.PostType.IN_REAL_TIME) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+                List<String> groupArraysIds = new ArrayList<>();
+                log.info("prev publication response -> {}", response);
+                for (GroupPostStatus status : response.getPostStatus()) {
+                    groupArraysIds.add(status.getGroupId().toString());
+                }
+                PublicationRequest result = new PublicationRequest();
+                result.setType(request.getType());
+                result.setPublicationId(request.getPublicationId());
+                result.setText(request.getText());
+                result.setPostStatus(GroupPostStatus.PostStatus.PROCESSING);
+                result.setGroupIds(groupArraysIds.toArray(String[]::new));
+                result.setUserId(request.getUserId());
+                PublicationResponse resp = this.save(result);
+                log.info("publication resp add queue -> {}", resp);
+                String serialize = null;
+
+                serialize = objectMapper.writeValueAsString(resp);
+                rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, serialize);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
 
         return response;
     }
@@ -125,5 +161,33 @@ public class PublicationServiceImpl implements PublicationService {
                 .fbPublicationCount(publicationRepository.countByPostStatusAndSocialNetwork(GroupPostStatus.PostStatus.PUBLISHED, Group.SocialNetwork.FACEBOOK))
                 .vkPublicationCount(publicationRepository.countByPostStatusAndSocialNetwork(GroupPostStatus.PostStatus.PUBLISHED, Group.SocialNetwork.VK))
                 .build();
+    }
+
+    @Scheduled(fixedDelay = 100000)
+    public void startPost() throws IOException {
+        Page<Publication> notPublishing = publicationRepository.findNotPublishingDeferred(PageRequest.of(0, 50));
+        List<Publication> publicationResponseList = notPublishing.getContent();
+        log.info("batch size publiction -> {}", publicationResponseList.size());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        for (Publication response : publicationResponseList) {
+            PublicationRequest request = new PublicationRequest();
+            request.setText(response.getText());
+            List<String> groupIds = new ArrayList<>();
+            log.info("prev publication response -> {}", response);
+            for (GroupPostStatus status : response.getPostStatus()) {
+                groupIds.add(status.getGroupId().toString());
+            }
+            request.setGroupIds(groupIds.toArray(String[]::new));
+            request.setUserId(response.getUserId().toString());
+            request.setType(response.getPostType());
+            request.setPublicationId(response.getPublicationId().toString());
+            request.setPostStatus(GroupPostStatus.PostStatus.PROCESSING);
+            log.info("Sending message...");
+            PublicationResponse resp = this.save(request);
+            log.info("publication resp add queue -> {}", resp);
+            String serialize = objectMapper.writeValueAsString(resp);
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, serialize);
+        }
     }
 }

@@ -12,6 +12,11 @@ spring:
       name: ${spring.application.name}
   main:
     allow-bean-definition-overriding: true
+  rabbitmq:
+    host: ${RABBIT_HOST:rabbitmq.socshared.ml} # RabbitMQ host.
+    password: ${RABBIT_PASS:admin} # Login to authenticate against the broker.
+    port: ${RABBIT_PORT:5672} # RabbitMQ port.
+    username: ${RABBIT_USER:admin} # Login user to authenticate to the broker.
 
 feign:
   url:

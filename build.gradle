@@ -19,6 +19,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:2.2.1.RELEASE'
     implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'com.h2database:h2'

@@ -39,6 +39,10 @@ docker-deploy-swarm:
     - echo "POSTGRES_USER=admin" >> .env_storage
     - echo "POSTGRES_PASSWORD=admin" >> .env_storage
     - echo "POSTGRES_DB=storage" >> .env_storage
+    - echo "RABBIT_HOST=rabbitmq" >> .env_storage
+    - echo "RABBIT_PORT=5672" >> .env_storage
+    - echo "RABBIT_USER=admin" >> .env_storage
+    - echo "RABBIT_PASS=2b01db35ec69408aa65276dd710bc99c" >> .env_storage
     - echo "AUTH_SERVICE=http://auth-service:9999" >> .env_storage
     - echo "SECRET_JWT_KEY=$SECRET_JWT_KEY" >> .env_storage
     - docker stack deploy -c docker-compose.yaml socshared
