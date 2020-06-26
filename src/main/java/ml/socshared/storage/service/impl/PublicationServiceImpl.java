@@ -85,23 +85,27 @@ public class PublicationServiceImpl implements PublicationService {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
-                List<String> groupArraysIds = new ArrayList<>();
-                log.info("prev publication response -> {}", response);
-                for (GroupPostStatus status : response.getPostStatus()) {
-                    groupArraysIds.add(status.getGroupId().toString());
+                for (String groupId : groupIds) {
+                    Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
+                    GroupPostStatus result = new GroupPostStatus();
+                    result.setStatusText(request.getStatusText());
+                    result.setGroupId(group.getGroupId());
+                    result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.PROCESSING);
+                    result.setPublicationId(publicationSave.getPublicationId());
+                    result.setPostVkId(request.getPostVkId());
+                    result.setPostFacebookId(request.getPostFacebookId());
+                    result.setSocialNetwork(group.getSocialNetwork());
+                    result.setGroupVkId(group.getGroupVkId());
+                    result.setGroupFacebookId(group.getGroupFacebookId());
+                    result = groupPostStatusRepository.save(result);
+                    groupPostStatuses.add(result);
                 }
-                PublicationRequest result = new PublicationRequest();
-                result.setType(request.getType());
-                result.setPublicationId(request.getPublicationId());
-                result.setText(request.getText());
-                result.setPostStatus(GroupPostStatus.PostStatus.PROCESSING);
-                result.setGroupIds(groupArraysIds.toArray(String[]::new));
-                result.setUserId(request.getUserId());
-                PublicationResponse resp = this.save(result);
-                log.info("publication resp add queue -> {}", resp);
-                String serialize = null;
+                publicationSave.setPostStatus(groupPostStatuses);
 
-                serialize = objectMapper.writeValueAsString(resp);
+                PublicationResponse resp = new PublicationResponse(publicationSave);
+
+                log.info("publication resp add queue -> {}", resp);
+                String serialize = objectMapper.writeValueAsString(resp);
                 rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, serialize);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
