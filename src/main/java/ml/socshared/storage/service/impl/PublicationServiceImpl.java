@@ -85,12 +85,14 @@ public class PublicationServiceImpl implements PublicationService {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
+                groupPostStatuses = new HashSet<>();
+
                 for (String groupId : groupIds) {
                     Group group = groupRepository.findById(UUID.fromString(groupId)).orElseThrow(() -> new HttpNotFoundException("Not found group by id: " + groupId));
                     GroupPostStatus result = new GroupPostStatus();
                     result.setStatusText(request.getStatusText());
                     result.setGroupId(group.getGroupId());
-                    result.setPostStatus(request.getPostStatus() != null ? request.getPostStatus() : GroupPostStatus.PostStatus.PROCESSING);
+                    result.setPostStatus(GroupPostStatus.PostStatus.PROCESSING);
                     result.setPublicationId(publicationSave.getPublicationId());
                     result.setPostVkId(request.getPostVkId());
                     result.setPostFacebookId(request.getPostFacebookId());
